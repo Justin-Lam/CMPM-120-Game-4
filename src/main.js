@@ -15,13 +15,13 @@ let config = {
 				x: 0,
 				y: 0
 			},
-			//debug: true
+			debug: true
 		}
 	},
 	width: 16 * 70,
 	height: 9 * 70,
 	autoCenter: true,
-	scene: [Load]
+	scene: [Load, Test]
 }
 
 const game = new Phaser.Game(config);
