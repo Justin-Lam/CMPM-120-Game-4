@@ -8,13 +8,14 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 	#DASH_VELOCITY = this.#MAX_VELOCITY * 5.0;
 	#DASH_DURATION = 0.15;
-	#DASH_COOLDOWN = 1.0;
+	#DASH_COOLDOWN = 0.5;
 
 	// Dynamic Variables
 	#moveMagnitudeX = 0.0;
 	#moveMagnitudeY = 0.0;
 	#dashDurationCounter = 0.0;
 	#dashCooldownCounter = 0.0;
+	#weapon = "melee";
 
 	// Reference Variables
 	/** @type {Phaser.Input.Keyboard.Key} */  #upKey;
@@ -25,6 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 
 	// Methods
+	/** @param {Phaser.Scene} scene	@param {number} x	@param {number} y */
 	constructor(scene, x, y)
 	{
 		// Do necessary initial stuff
@@ -34,36 +36,35 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		this.setCollideWorldBounds(true);
 
 		// Set up input
-		this.#upKey = scene.upKey;
-		this.#leftKey = scene.leftKey;
-		this.#downKey = scene.downKey;
-		this.#rightKey = scene.rightKey;
-		this.#dashKey = scene.dashKey;
-
+		this.#upKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+		this.#leftKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+		this.#downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+		this.#rightKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+		this.#dashKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 		this.#dashKey.on("down", () => {
-			// Check that the player is moving, dash is off cooldown, and the player isn't already dashing
-			if (this.body.velocity != Phaser.Math.Vector2.ZERO && this.#dashCooldownCounter <= 0.0 && this.#dashDurationCounter <= 0.0)
-			{
-				this.body.setMaxVelocity(this.#DASH_VELOCITY, this.#DASH_VELOCITY);
-				this.body.setVelocity(this.#DASH_VELOCITY * this.#moveMagnitudeX, this.#DASH_VELOCITY * this.#moveMagnitudeY);
-				this.#dashDurationCounter = this.#DASH_DURATION;
+			this.#dash();
+		});
+		scene.input.on("pointerdown", (pointer) => {
+			if (this.#weapon == "melee") {
+
+			}
+			else if (this.#weapon == "ranged") {
+
 			}
 		});
-
-		// Set up physics
-		this.body.setMaxVelocity(this.#MAX_VELOCITY);
 
 		// Return instance
 		return this;
 	}
 
+	/** @param {number} delta */
 	update(delta)
 	{
-		this.eightDirectionMovement();
-		this.handleDashCounters(delta);
+		this.#eightDirectionMovement();
+		this.#handleDashCounters(delta);
 	}
 
-	eightDirectionMovement()
+	#eightDirectionMovement()
 	{
 		// Check if the player is dashing; don't allow eight direction movement if so
 		if (this.#dashDurationCounter > 0.0) {
@@ -127,7 +128,19 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
-	handleDashCounters(delta)
+	#dash()
+	{
+		// Check that the player is moving, dash is off cooldown, and the player isn't already dashing
+		if (this.body.velocity != Phaser.Math.Vector2.ZERO && this.#dashCooldownCounter <= 0.0 && this.#dashDurationCounter <= 0.0)
+		{
+			this.body.setMaxVelocity(this.#DASH_VELOCITY, this.#DASH_VELOCITY);
+			this.body.setVelocity(this.#DASH_VELOCITY * this.#moveMagnitudeX, this.#DASH_VELOCITY * this.#moveMagnitudeY);
+			this.#dashDurationCounter = this.#DASH_DURATION;
+		}
+	}
+
+	/** @param {number} delta */
+	#handleDashCounters(delta)
 	{
 		// delta is in ms, when we work with it we need to divide it by 1000 to get its value in seconds
 		
@@ -148,5 +161,17 @@ class Player extends Phaser.Physics.Arcade.Sprite
 				this.#dashCooldownCounter = 0;
 			}
 		}
+	}
+
+	/** @param {Phaser.Input.Pointer} pointer */
+	#meleeAttack(pointer)
+	{
+
+	}
+
+	/** @param {Phaser.Input.Pointer} pointer */
+	#rangedAttack(pointer)
+	{
+
 	}
 }

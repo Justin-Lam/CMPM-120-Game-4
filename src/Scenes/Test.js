@@ -1,15 +1,8 @@
 class Test extends Phaser.Scene
 {
-	// Input
-	/** @type {Phaser.Input.Keyboard.Key} */  upKey;
-	/** @type {Phaser.Input.Keyboard.Key} */  leftKey;
-	/** @type {Phaser.Input.Keyboard.Key} */  downKey;
-	/** @type {Phaser.Input.Keyboard.Key} */  rightKey;
-	/** @type {Phaser.Input.Keyboard.Key} */  dashKey;
-
 	// Game Objects
 	/** @type {Player} */  player;
-
+	/** @type {Phaser.Physics.Arcade.Group} */  enemiesGroup;
 
 	// Methods
 	constructor()
@@ -19,15 +12,21 @@ class Test extends Phaser.Scene
 
 	create()
 	{
-		// Set up input
-		this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-		this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-		this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-		this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-		this.dashKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
 		// Create player
 		this.player = new Player(this, 100, 100);
+
+		// Create enemies
+		this.enemies = [
+			new Enemy(this, 500, 100),
+			new Enemy(this, 600, 200),
+			new Enemy(this, 700, 300),
+			new Enemy(this, 800, 400),
+			new Enemy(this, 900, 500)
+		];
+		this.enemiesGroup = this.physics.add.group(this.enemies);
+
+		// Create collision handlers
+		this.physics.add.collider(this.player, this.enemiesGroup);
 	}
 
 	update(time, delta)
