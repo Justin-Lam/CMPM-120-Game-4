@@ -8,6 +8,9 @@ let config = {
 	render: {
 		pixelArt: true  // prevent pixel art from getting blurred when scaled
 	},
+	width: 16 * 70,
+	height: 9 * 70,
+	autoCenter: true,
 	physics: {
 		default: "arcade",
 		arcade: {
@@ -18,9 +21,6 @@ let config = {
 			debug: true
 		}
 	},
-	width: 16 * 70,
-	height: 9 * 70,
-	autoCenter: true,
 	scene: [Load, Test]
 }
 
