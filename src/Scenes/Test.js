@@ -2,10 +2,11 @@ class Test extends Phaser.Scene
 {
 	// Game Objects
 	/** @type {Player} */  player;
-	/** @type {Phaser.Physics.Arcade.Group} */  enemiesGroup;
+	/** @type {Phaser.Physics.Arcade.Group} */  enemyAttackGroup;
+	/** @type {Phaser.Physics.Arcade.Group} */  enemyGroup;
 
 	// Colliders
-	/** @type {Phaser.Physics.Arcade.Collider} */  player_Enemy_Collider;
+	playerDashDisableColliders = [];
 
 	// Methods
 	constructor()
@@ -22,25 +23,28 @@ class Test extends Phaser.Scene
 		this.player = new Player(this, 100, 100);
 
 		// Create enemies
-		this.enemies = [
-			new Enemy(this, 500, 100),
-			new Enemy(this, 600, 200),
-			new Enemy(this, 700, 300),
-			new Enemy(this, 800, 400),
-			new Enemy(this, 900, 500)
-		];
-		this.enemiesGroup = this.physics.add.group(this.enemies);
+		this.enemyAttackGroup = this.physics.add.group();
+		this.enemyGroup = this.physics.add.group();
+		this.enemyGroup.add(new Enemy1(this, 900, 300));
 
 		// Create collision handlers
-		this.player_Enemy_Collider = this.physics.add.collider(this.player, this.enemiesGroup);
-		this.physics.add.overlap(this.player.netSwipe, this.enemiesGroup, this.netSwipe_Enemy_Collision, null, this);
-		this.physics.add.overlap(this.player.breadGroup, this.enemiesGroup, this.bread_Enemy_Collision, null, this);
+		this.playerDashDisableColliders.push(this.physics.add.collider(this.player, this.enemyGroup));
+		this.physics.add.overlap(this.player.netSwipe, this.enemyGroup, this.netSwipe_Enemy_Collision, null, this);
+		this.physics.add.overlap(this.player.breadGroup, this.enemyGroup, this.bread_Enemy_Collision, null, this);
+		this.physics.add.collider(this.enemyGroup, this.enemyGroup);
+		this.playerDashDisableColliders.push(this.physics.add.overlap(this.player, this.enemyAttackGroup, this.enemyAttack_Player_Collision, null, this));
+
+		// debug key listener (assigned to D key)
+		this.input.keyboard.on('keydown-F', () => {
+			console.log("debug message");
+		});
 	}
 
 	update(time, delta)
 	{
 		this.player.update(delta);
-		for (let enemy of this.enemiesGroup.getChildren()) {
+
+		for (let enemy of this.enemyGroup.getChildren()) {
 			enemy.update(delta);
 		}
 	}
@@ -49,8 +53,7 @@ class Test extends Phaser.Scene
 	netSwipe_Enemy_Collision(swipe, enemy)
 	{
 		if (swipe.visible) {
-			if (enemy.invulnerableToNetDurationCounter <= 0.0)
-			{
+			if (enemy.invulnerableToNetDurationCounter <= 0.0) {
 				enemy.getHitByNet(this.player.NET_DAMAGE);
 			}
 		}
@@ -62,6 +65,16 @@ class Test extends Phaser.Scene
 		if (bread.visible) {
 			bread.deactivate();
 			enemy.takeDamage(this.player.GUN_DAMAGE);
+		}
+	}
+
+	/** @param {Player} player    @param {Phaser.Physics.Arcade.Sprite} attack */
+	enemyAttack_Player_Collision(player, attack)
+	{
+		if (attack.visible) {
+			if (player.invincibilityDurationCounter <= 0.0) {
+				player.getHitByAttack(attack);
+			}
 		}
 	}
 }

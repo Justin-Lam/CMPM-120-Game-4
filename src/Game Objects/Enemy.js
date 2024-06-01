@@ -2,44 +2,65 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 {
 	// VARIABLES:
 
-	// Stats
-	MAX_HEALTH = 5;
-	health = this.MAX_HEALTH;
-	DAMAGE = 2;
+	// Body
+	BODY_SIZE_RATIO = 0.5
 
-	// Player
-	/** @type {Player} */  player;
+	// Stats
+	health = 0;
 
 	// Statuses
-	knockbackDurationCounter = 0.0;
-	INVULNERABLE_TO_NET_DURATION = 0.1;
-	invulnerableToNetDurationCounter = 0.0;
+	invulnerableToNetDurationCounter = 0;
+	knockbackDurationCounter = 0;
+	stunnedDurationCounter = 0;
 
 
 
 	// METHODS:
 	
 	/** @param {Phaser.Scene} scene	@param {number} x	@param {number} y */
-	constructor(scene, x, y)
+	constructor(scene, x, y, texture, frame)
 	{
 		// Do necessary initial stuff
-		super(scene, x, y, "Enemy", 0);
+		super(scene, x, y, texture, frame);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 
 		// Set up body
 		this.setPushable(false);
-
-		// Get reference to player
-		this.player = this.scene.player;
-
-		// Return instance
-		return this;
+		this.setBodySize(this.displayWidth * this.BODY_SIZE_RATIO, this.displayHeight * this.BODY_SIZE_RATIO);
 	}
 
 	update(delta)
 	{
 		this.handleHitByNetCounters(delta);
+	}
+
+	getHitByNet(damage)
+	{
+		this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
+		this.stunnedDurationCounter = this.scene.player.NET_STUN_DURATION;
+		this.getKnockbacked();
+		this.takeDamage(damage);
+	}
+
+	getKnockbacked()
+	{
+		// Stop acceleration and set max velocity
+		this.body.setAcceleration(0, 0);
+		this.body.setMaxVelocity(this.scene.player.NET_KNOCKBACK_VELOCITY);
+
+		// Set the trajectory of the enemy
+		let dx = this.x - this.scene.player.x;
+		let dy = this.y - this.scene.player.y;
+		let magnitude = Math.sqrt(dx**2 + dy**2);
+		let moveMagnitudeX = dx / magnitude;
+		let moveMagnitudeY = dy / magnitude;
+		let velocityX = moveMagnitudeX * this.scene.player.NET_KNOCKBACK_VELOCITY;
+		let velocityY = moveMagnitudeY * this.scene.player.NET_KNOCKBACK_VELOCITY;
+		this.body.setVelocity(velocityX, velocityY);
+		
+		// Set knockback duration counter
+		this.knockbackDurationCounter = this.scene.player.NET_KNOCKBACK_DURATION;
 	}
 
 	takeDamage(amount)
@@ -55,50 +76,39 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
-	getHitByNet(damage)
-	{
-		this.getKnockbacked();
-		this.invulnerableToNetDurationCounter = this.INVULNERABLE_TO_NET_DURATION;
-		this.takeDamage(damage);
-	}
-
-	getKnockbacked()
-	{
-		// Set the trajectory of the enemy
-		let dx = this.x - this.player.x;
-		let dy = this.y - this.player.y;
-		let magnitude = Math.sqrt(dx**2 + dy**2);
-		let moveMagnitudeX = dx / magnitude;
-		let moveMagnitudeY = dy / magnitude;
-		let velocityX = moveMagnitudeX * this.player.NET_KNOCKBACK_VELOCITY;
-		let velocityY = moveMagnitudeY * this.player.NET_KNOCKBACK_VELOCITY;
-		this.body.setVelocity(velocityX, velocityY);
-		
-		// Set knockback duration counter
-		this.knockbackDurationCounter = this.player.NET_KNOCKBACK_DURATION;
-	}
-
 	handleHitByNetCounters(delta)
 	{
 		// delta is in ms, when we work with it we need to divide it by 1000 to get its value in seconds
 
-		// Knockback
-		if (this.knockbackDurationCounter > 0.0)
+		// Invulnerable To Net
+		if (this.invulnerableToNetDurationCounter > 0)
 		{
-			this.knockbackDurationCounter -= delta/1000;
-			if (this.knockbackDurationCounter <= 0.0) {
-				this.knockbackDurationCounter = 0.0;
-				this.body.setVelocity(0, 0);
+			this.invulnerableToNetDurationCounter -= delta/1000;
+			if (this.invulnerableToNetDurationCounter < 0) {
+				this.invulnerableToNetDurationCounter = 0;
 			}
 		}
 
-		// Invulnerable To Net
-		if (this.invulnerableToNetDurationCounter > 0.0)
+		// Stunned
+		if (this.stunnedDurationCounter > 0)
 		{
-			this.invulnerableToNetDurationCounter -= delta/1000;
-			if (this.invulnerableToNetDurationCounter <= 0.0) {
-				this.invulnerableToNetDurationCounter = 0.0;
+			this.stunnedDurationCounter -= delta/1000;
+			if (this.stunnedDurationCounter < 0) {
+				this.stunnedDurationCounter = 0;
+			}
+		}
+
+		// Knockback
+		if (this.knockbackDurationCounter > 0)
+		{
+			this.knockbackDurationCounter -= delta/1000;
+			if (this.knockbackDurationCounter <= 0) {
+				this.knockbackDurationCounter = 0;
+				this.body.setAcceleration(0, 0);
+				this.body.setVelocity(0, 0);
 			}
 		}
 	}
+
+	executeBehavior() {}		// to be overwritten by the extend class
 }
