@@ -3,7 +3,7 @@
 
 let config = {
 	parent: 'phaser-game',
-	type: Phaser.CANVAS,
+	type: Phaser.WEBGL,
 	fps: { forceSetTimeOut: true, target: 60 },
 	render: {
 		pixelArt: true  // prevent pixel art from getting blurred when scaled
@@ -24,4 +24,5 @@ let config = {
 	scene: [Load, Test]
 }
 
+const SCALE = 2;
 const game = new Phaser.Game(config);
