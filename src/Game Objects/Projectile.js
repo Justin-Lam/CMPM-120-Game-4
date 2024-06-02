@@ -60,7 +60,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite
 
 		// Temporary: deactivate projectile when it leaves the screen
 		// Later on into development need to deactivate the bread when it collides with the walls of the dungeon
-		if (this.x < -this.displayWidth/2 || this.x > game.config.width + this.displayWidth/2 || this.y < -this.displayHeight/2 || this.y > game.config.height + this.displayHeight/2) {
+		if (this.x < -this.displayWidth/2 || this.x > this.scene.physics.world.bounds.width + this.displayWidth/2 || this.y < -this.displayHeight/2 || this.y > this.scene.physics.world.bounds.height + this.displayHeight/2) {
 			this.deactivate();
 		}
 	}

@@ -64,7 +64,9 @@ class Test extends Phaser.Scene
 			this.enemyAttackGroup.add(poop);
 		}
 		this.enemyGroup = this.physics.add.group();
-		this.enemyGroup.add(new Enemy2(this, 900, 300));
+		this.enemyGroup.add(new Enemy1(this, 900, 200));
+		this.enemyGroup.add(new Enemy2(this, 900, 400));
+		this.enemyGroup.add(new Enemy1(this, 900, 600));
 
 		// Creating layers that appear above player
 		this.treeLayer1 = this.map.createLayer("Trees-collide", this.tilesetList);
@@ -150,7 +152,6 @@ class Test extends Phaser.Scene
 	{
 		if (attack.visible) {
 			if (player.invincibilityDurationCounter <= 0.0) {
-				attack.deactivate();
 				player.getHitByAttack(attack);
 			}
 		}

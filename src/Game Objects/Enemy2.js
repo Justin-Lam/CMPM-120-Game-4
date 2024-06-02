@@ -15,7 +15,7 @@ class Enemy2 extends Enemy
 	moveCooldownCounter = 0;
 
 	// Attack
-	EXECUTE_ATTACK_RANGE = 750;
+	EXECUTE_ATTACK_RANGE = 1000;
 	ATTACK_BUILDUP_DURATION = 0.5;					// in seconds
 	IN_BETWEEN_SHOTS_DURATION = 0.25;               // in seconds
 	ATTACK_COOLDOWN = 4;							// in seconds
@@ -26,7 +26,7 @@ class Enemy2 extends Enemy
 	// Poop
 	NUM_POOP = 3;
 	DAMAGE = 1;
-	POOP_RANGE = 1000;
+	POOP_RANGE = 750;
 	POOP_VELOCITY = 500;
 	POOP_KNOCKBACK_VELOCITY = 1000;
 	POOP_KNOCKBACK_DURATION = 0.05;				// in seconds

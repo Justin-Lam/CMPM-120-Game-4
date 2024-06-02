@@ -86,11 +86,14 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 		// Set up combat
 		scene.input.on("pointerdown", (pointer) => {
+			// Convert pointer from screen to world coordinates
+			let worldPointer = this.scene.cameras.main.getWorldPoint(pointer.x, pointer.y);
+
 			if (pointer.leftButtonDown()) {
-				this.netAttack(pointer);
+				this.netAttack(worldPointer);
 			}
 			else if (pointer.rightButtonDown()) {
-				this.gunAttack(pointer);
+				this.gunAttack(worldPointer);
 			}
 		});
 
