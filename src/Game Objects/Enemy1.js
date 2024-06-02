@@ -3,17 +3,17 @@ class Enemy1 extends Enemy
 	// VARIABLES:
 
 	// Stats
-	MAX_HEALTH = 5;
+	MAX_HEALTH = 10;
 
 	// Movement
-	MAX_VELOCITY = 150;
+	MAX_VELOCITY = 125;
 	ACCELERATION = this.MAX_VELOCITY * 10;
 
 	// Attack
 	/** @type {Phaser.Physics.Arcade.Sprite} */  attackSwipe;
-	DAMAGE = 2;
+	DAMAGE = 3;
 	EXECUTE_ATTACK_RANGE = 100;
-	ATTACK_RANGE = this.EXECUTE_ATTACK_RANGE * 0.75;
+	ATTACK_RANGE = 75;
 	ATTACK_KNOCKBACK_VELOCITY = 1000;
 	ATTACK_KNOCKBACK_DURATION = 0.15;				// in seconds
 	ATTACK_BUILDUP_DURATION = 0.5;					// in seconds
@@ -31,10 +31,7 @@ class Enemy1 extends Enemy
 	constructor(scene, x, y)
 	{
 		// Call superclass's constructor
-		super(scene, x, y, "Enemy", 0);
-
-		// Set body
-		this.body.setMaxVelocity(this.MAX_VELOCITY);
+		super(scene, x, y, "Enemy1", 0);
 
 		// Set stats
 		this.health = this.MAX_HEALTH;
@@ -47,62 +44,63 @@ class Enemy1 extends Enemy
 		this.attackSwipe.DAMAGE = this.DAMAGE;
 		this.attackSwipe.KNOCKBACK_VELOCITY = this.ATTACK_KNOCKBACK_VELOCITY;
 		this.attackSwipe.KNOCKBACK_DURATION = this.ATTACK_KNOCKBACK_DURATION;
-		this.attackSwipe		
 		this.scene.enemyAttackGroup.add(this.attackSwipe);
 
 		// Return instance
 		return this;
 	}
 
+	/** @param {number} delta */
 	update(delta)
 	{
 		super.update(delta);
 		this.executeBehavior();
-		this.handleAttackCounters(delta);
+		this.handleBehaviorCounters(delta);
 	}
 
 	executeBehavior()
 	{
 		// Check that the enemy isn't stunned or being knocked back
-		if (this.stunnedDurationCounter <= 0 && this.knockbackDurationCounter <= 0)
-		{
-			// Check that the enemy isn't attacking
-			if (this.attackBuildupDurationCounter <= 0 && this.attackDurationCounter <= 0)
-			{
-				// Check if attack is off cooldown
-				if (this.attackCooldownCounter <= 0)
-				{
-					// Check if enemy is in range of player to attack
-					let dx = this.x - this.scene.player.x;
-					let dy = this.y - this.scene.player.y;
-					let distance = Math.sqrt(dx**2 + dy**2);
-					if (distance <= this.EXECUTE_ATTACK_RANGE)
-					{
-						// Check that the player isn't dashing
-						if (this.scene.player.dashDurationCounter <= 0)
-						{
-							// Stop moving
-							this.body.setAcceleration(0, 0);
-							this.body.setVelocity(0, 0);
+		if (this.stunnedDurationCounter > 0 || this.knockbackDurationCounter > 0) {
+			return;
+		}
+		// Check that the enemy isn't attacking
+		if (this.attackBuildupDurationCounter > 0 || this.attackDurationCounter > 0) {
+			return;
+		}
 
-							// Set attack buildup duration
-							this.attackBuildupDurationCounter = this.ATTACK_BUILDUP_DURATION;
-						}
-						else
-						{
-							this.moveTowardsPlayer();
-						}
-					}
-					else
-					{
-						this.moveTowardsPlayer();
-					}
+		// Check if attack is off cooldown
+		if (this.attackCooldownCounter <= 0)
+		{
+			// Check if enemy is in range of player to attack
+			let dx = this.x - this.scene.player.x;
+			let dy = this.y - this.scene.player.y;
+			let distance = Math.sqrt(dx**2 + dy**2);
+			if (distance <= this.EXECUTE_ATTACK_RANGE)
+			{
+				// Check that the player isn't dashing
+				if (this.scene.player.dashDurationCounter <= 0)
+				{
+					// Stop moving
+					this.body.setAcceleration(0, 0);
+					this.body.setVelocity(0, 0);
+
+					// Set attack buildup duration
+					this.attackBuildupDurationCounter = this.ATTACK_BUILDUP_DURATION;
 				}
 				else
 				{
 					this.moveTowardsPlayer();
 				}
 			}
+			else
+			{
+				this.moveTowardsPlayer();
+			}
+		}
+		else
+		{
+			this.moveTowardsPlayer();
 		}
 	}
 
@@ -161,7 +159,8 @@ class Enemy1 extends Enemy
 		this.attackDurationCounter = this.ATTACK_DURATION;
 	}
 
-	handleAttackCounters(delta)
+	/** @param {number} delta */
+	handleBehaviorCounters(delta)
 	{
 		// delta is in ms, when we work with it we need to divide it by 1000 to get its value in seconds
 
@@ -185,6 +184,7 @@ class Enemy1 extends Enemy
 				this.attackCooldownCounter = this.ATTACK_COOLDOWN;
 			}
 		}
+		
 		if (this.attackCooldownCounter > 0)
 		{
 			// Decrement counter until it's 0

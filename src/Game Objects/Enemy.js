@@ -30,39 +30,43 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		this.setBodySize(this.displayWidth * this.BODY_SIZE_RATIO, this.displayHeight * this.BODY_SIZE_RATIO);
 	}
 
+	/** @param {number} delta */
 	update(delta)
 	{
 		this.handleHitByNetCounters(delta);
 	}
 
-	getHitByNet(damage)
+	/** @param {Phaser.Physics.Arcade.Sprite} attack */
+	getHitByAttack(attack)
 	{
 		this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
 		this.stunnedDurationCounter = this.scene.player.NET_STUN_DURATION;
-		this.getKnockbacked();
-		this.takeDamage(damage);
+		this.getKnockbacked(attack);
+		this.takeDamage(attack.DAMAGE);
 	}
 
-	getKnockbacked()
+	/** @param {Phaser.Physics.Arcade.Sprite} attack */
+	getKnockbacked(attack)
 	{
 		// Stop acceleration and set max velocity
 		this.body.setAcceleration(0, 0);
-		this.body.setMaxVelocity(this.scene.player.NET_KNOCKBACK_VELOCITY);
+		this.body.setMaxVelocity(attack.KNOCKBACK_VELOCITY);
 
 		// Set the trajectory of the enemy
-		let dx = this.x - this.scene.player.x;
-		let dy = this.y - this.scene.player.y;
+		let dx = this.x - attack.owner.x;
+		let dy = this.y - attack.owner.y;
 		let magnitude = Math.sqrt(dx**2 + dy**2);
 		let moveMagnitudeX = dx / magnitude;
 		let moveMagnitudeY = dy / magnitude;
-		let velocityX = moveMagnitudeX * this.scene.player.NET_KNOCKBACK_VELOCITY;
-		let velocityY = moveMagnitudeY * this.scene.player.NET_KNOCKBACK_VELOCITY;
+		let velocityX = moveMagnitudeX * attack.KNOCKBACK_VELOCITY;
+		let velocityY = moveMagnitudeY * attack.KNOCKBACK_VELOCITY;
 		this.body.setVelocity(velocityX, velocityY);
 		
 		// Set knockback duration counter
-		this.knockbackDurationCounter = this.scene.player.NET_KNOCKBACK_DURATION;
+		this.knockbackDurationCounter = attack.KNOCKBACK_DURATION;
 	}
 
+	/** @param {number} amount */
 	takeDamage(amount)
 	{
 		// Decrease health
@@ -76,6 +80,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		}
 	}
 
+	/** @param {number} delta */
 	handleHitByNetCounters(delta)
 	{
 		// delta is in ms, when we work with it we need to divide it by 1000 to get its value in seconds

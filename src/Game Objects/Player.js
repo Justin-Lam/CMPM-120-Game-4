@@ -43,6 +43,8 @@ class Player extends Phaser.Physics.Arcade.Sprite
 	GUN_DAMAGE = 1.0;
 	GUN_RANGE = 300;											// in pixels
 	BREAD_VELOCITY = 500;
+	BREAD_KNOCKBACK_VELOCITY = 1000;
+	BREAD_KNOCKBACK_DURATION = 0.05;								// in seconds
 	GUN_MOVEMENT_IMPAIRMENT_DURATION = this.NET_DURATION;		// in seconds
 	GUN_COOLDOWN = 0.75;										// in seconds
 	gunMovementImpairmentDurationCounter = 0
@@ -91,14 +93,20 @@ class Player extends Phaser.Physics.Arcade.Sprite
 				this.gunAttack(pointer);
 			}
 		});
+
 		this.netSwipe = scene.physics.add.sprite(-100, -100, "Net Swipe", 0);
 		this.netSwipe.setVisible(false);
+		this.netSwipe.owner = this;
+		this.netSwipe.KNOCKBACK_VELOCITY = this.NET_KNOCKBACK_VELOCITY;
+		this.netSwipe.KNOCKBACK_DURATION = this.NET_KNOCKBACK_DURATION;
+		this.netSwipe.DAMAGE = this.NET_DAMAGE;
+
 		this.breadGroup = scene.physics.add.group({
 			maxSize: 50,
 			runChildUpdate: true
 		});
 		this.breadGroup.createMultiple({
-			classType: Bread,
+			classType: Projectile,
 			setXY: {x: -100, y: -100},
 			key: "Bread",
 			frame: 0,
@@ -106,9 +114,6 @@ class Player extends Phaser.Physics.Arcade.Sprite
 			active: false,
 			visible: false
 		});
-		for (let bread of this.breadGroup.getChildren()) {
-			bread.player = this;
-		}
 
 		// Return instance
 		return this;
@@ -354,7 +359,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		let bread = this.breadGroup.getFirstDead();
 		if (bread != null) {
 			// Fire, impair the player's movement, and put the gun on cooldown
-			bread.activate(pointer);
+			bread.activate(this, this.x, this.y, pointer.x, pointer.y, this.BREAD_VELOCITY, this.GUN_RANGE, this.BREAD_KNOCKBACK_VELOCITY, this.BREAD_KNOCKBACK_DURATION, this.GUN_DAMAGE);
 			this.gunMovementImpairmentDurationCounter = this.GUN_MOVEMENT_IMPAIRMENT_DURATION;
 			this.gunCooldownCounter = this.GUN_COOLDOWN;
 		}

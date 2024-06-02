@@ -3,6 +3,7 @@ class Test extends Phaser.Scene
 	// Game Objects
 	/** @type {Player} */  player;
 	/** @type {Phaser.Physics.Arcade.Group} */  enemyAttackGroup;
+	/** @type {Phaser.Physics.Arcade.Group} */  enemy2PoopGroup;
 	/** @type {Phaser.Physics.Arcade.Group} */  enemyGroup;
 
 	// Colliders
@@ -24,8 +25,24 @@ class Test extends Phaser.Scene
 
 		// Create enemies
 		this.enemyAttackGroup = this.physics.add.group();
+		this.enemy2PoopGroup = this.physics.add.group({
+			maxSize: 50,
+			runChildUpdate: true
+		});
+		let enemyPoops = this.enemy2PoopGroup.createMultiple({
+			classType: Projectile,
+			setXY: {x: -100, y: -100},
+			key: "Enemy Poop",
+			frame: 0,
+			repeat: this.enemy2PoopGroup.maxSize-1,
+			active: false,
+			visible: false
+		});
+		for (let poop of enemyPoops) {
+			this.enemyAttackGroup.add(poop);
+		}
 		this.enemyGroup = this.physics.add.group();
-		this.enemyGroup.add(new Enemy1(this, 900, 300));
+		this.enemyGroup.add(new Enemy2(this, 900, 300));
 
 		// Create collision handlers
 		this.playerDashDisableColliders.push(this.physics.add.collider(this.player, this.enemyGroup));
@@ -54,7 +71,7 @@ class Test extends Phaser.Scene
 	{
 		if (swipe.visible) {
 			if (enemy.invulnerableToNetDurationCounter <= 0.0) {
-				enemy.getHitByNet(this.player.NET_DAMAGE);
+				enemy.getHitByAttack(swipe);
 			}
 		}
 	}
@@ -64,7 +81,7 @@ class Test extends Phaser.Scene
 	{
 		if (bread.visible) {
 			bread.deactivate();
-			enemy.takeDamage(this.player.GUN_DAMAGE);
+			enemy.getHitByAttack(bread);
 		}
 	}
 
@@ -73,6 +90,7 @@ class Test extends Phaser.Scene
 	{
 		if (attack.visible) {
 			if (player.invincibilityDurationCounter <= 0.0) {
+				attack.deactivate();
 				player.getHitByAttack(attack);
 			}
 		}
