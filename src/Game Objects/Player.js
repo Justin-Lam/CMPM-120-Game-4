@@ -262,6 +262,10 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		if (this.dashDurationCounter > 0) {
 			return;
 		}
+		// Check that the player isn't shooting bread
+		if (this.gunMovementImpairmentDurationCounter > 0) {
+			return;
+		}
 		// Check that the attack is off cooldown and isn't currently being used
 		if (this.netCooldownCounter > 0 || this.netDurationCounter > 0) {
 			return;
@@ -331,6 +335,10 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		}
 		// Check that the player isn't dashing
 		if (this.dashDurationCounter > 0) {
+			return;
+		}
+		// Check that the player isn't swiping with net
+		if (this.netDurationCounter > 0) {
 			return;
 		}
 		// Check that the attack is off cooldown
