@@ -1,7 +1,0 @@
-Justin:
-	abcd
-Blythe:
-	implement temporary map with collisions and camera movement [DONE]
-	implement collisions between enemy2 and map
-	fix scaling
-	do map random gen

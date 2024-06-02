@@ -1,5 +1,7 @@
 class Test extends Phaser.Scene
 {
+	// VARIABLES:
+
 	// Game Objects
 	/** @type {Player} */  player;
 	/** @type {Phaser.Physics.Arcade.Group} */  enemyAttackGroup;
@@ -9,7 +11,9 @@ class Test extends Phaser.Scene
 	// Colliders
 	playerDashDisableColliders = [];
 
-	// Methods
+
+	
+	// METHODS:
 	constructor()
 	{
 		super('testScene')
