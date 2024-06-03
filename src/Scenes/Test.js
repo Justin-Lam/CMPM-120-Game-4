@@ -68,9 +68,10 @@ class Test extends Phaser.Scene
 			this.enemyAttackGroup.add(poop);
 		}
 		this.enemyGroup = this.physics.add.group();
-		this.enemyGroup.add(new Enemy1(this, 900, 200));
-		this.enemyGroup.add(new Enemy2(this, 900, 400));
-		this.enemyGroup.add(new Enemy1(this, 900, 600));
+		//this.enemyGroup.add(new Enemy1(this, 750, 200));
+		//this.enemyGroup.add(new Enemy1(this, 900, 600));
+		//this.enemyGroup.add(new Enemy2(this, 1200, 425));
+		this.enemyGroup.add(new Enemy3(this, 1200, 100));
 
 		// Creating layers that appear above player
 		this.treeLayer1 = this.map.createLayer("Trees-collide", this.tilesetList);
@@ -105,7 +106,7 @@ class Test extends Phaser.Scene
 		this.physics.add.collider(this.enemyGroup, this.treeBorderLayer);
 		this.physics.add.collider(this.enemyGroup, this.treeBorderDetailsLayer); // enemy collision with map
 
-		this.playerDashDisableColliders.push(this.physics.add.collider(this.player, this.enemyGroup));
+		this.playerDashDisableColliders.push(this.physics.add.collider(this.player, this.enemyGroup, this.player_Enemy_Collision, null, this));
 		this.physics.add.overlap(this.player.netSwipe, this.enemyGroup, this.netSwipe_Enemy_Collision, null, this);
 		this.physics.add.overlap(this.player.breadGroup, this.enemyGroup, this.bread_Enemy_Collision, null, this);
 		this.physics.add.collider(this.enemyGroup, this.enemyGroup);
@@ -132,13 +133,22 @@ class Test extends Phaser.Scene
 		}
 	}
 
+	/** @param {Player} player    @param {Enemy} enemy */
+	player_Enemy_Collision(player, enemy)
+	{
+		if (enemy instanceof Enemy3) {
+			if (enemy.chargeDurationCounter <= 0) {
+				return;
+			}
+			player.getHitByCharge(enemy);
+		}
+	}
+
 	/** @param {Phaser.Physics.Arcade.Sprite} swipe    @param {Enemy} enemy */
 	netSwipe_Enemy_Collision(swipe, enemy)
 	{
 		if (swipe.visible) {
-			if (enemy.invulnerableToNetDurationCounter <= 0.0) {
-				enemy.getHitByAttack(swipe);
-			}
+			enemy.getHitByAttack(swipe, "net");
 		}
 	}
 
@@ -147,7 +157,7 @@ class Test extends Phaser.Scene
 	{
 		if (bread.visible) {
 			bread.deactivate();
-			enemy.getHitByAttack(bread);
+			enemy.getHitByAttack(bread, "bread");
 		}
 	}
 
@@ -155,9 +165,7 @@ class Test extends Phaser.Scene
 	enemyAttack_Player_Collision(player, attack)
 	{
 		if (attack.visible) {
-			if (player.invincibilityDurationCounter <= 0.0) {
-				player.getHitByAttack(attack);
-			}
+			player.getHitByAttack(attack);
 		}
 	}
 }
