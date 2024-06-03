@@ -37,11 +37,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		this.handleHitByNetCounters(delta);
 	}
 
-	/** @param {Phaser.Physics.Arcade.Sprite} attack */
-	getHitByAttack(attack)
+	/** @param {Phaser.Physics.Arcade.Sprite} attack    @param {string} attackType */
+	getHitByAttack(attack, attackType)
 	{
-		this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
-		this.stunnedDurationCounter = this.scene.player.NET_STUN_DURATION;
+		if (attackType == "net") {
+			if (this.invulnerableToNetDurationCounter > 0) {
+				return;
+			}
+			this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
+			this.stunnedDurationCounter = this.scene.player.NET_STUN_DURATION;
+		}
 		this.getKnockbacked(attack);
 		this.takeDamage(attack.DAMAGE);
 	}

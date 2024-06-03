@@ -398,14 +398,31 @@ class Player extends Phaser.Physics.Arcade.Sprite
 	/** @param {Phaser.Physics.Arcade.Sprite} attack */
 	getHitByAttack(attack)
 	{
+		if (this.invincibilityDurationCounter > 0) {
+			return;
+		}
+
 		this.invincibilityDurationCounter = this.INVINCIBILITY_DURATION;
 		this.invincibilityFlashDurationCounter = this.INVINCIBILITY_DURATION / (this.NUM_INVINCIBILITY_FLASHES * 2);
-		this.getKnockedBack(attack);
+		this.getKnockedBackByAttack(attack);
 		this.takeDamage(attack.DAMAGE);
 	}
 
+	/** @param {Enemy} enemy */
+	getHitByCharge(enemy)
+	{
+		if (this.invincibilityDurationCounter > 0) {
+			return;
+		}
+
+		this.invincibilityDurationCounter = this.INVINCIBILITY_DURATION;
+		this.invincibilityFlashDurationCounter = this.INVINCIBILITY_DURATION / (this.NUM_INVINCIBILITY_FLASHES * 2);
+		this.getKnockedBackByCharge(enemy);
+		this.takeDamage(enemy.CHARGE_DAMAGE);
+	}
+
 	/** @param {Phaser.Physics.Arcade.Sprite} attack */
-	getKnockedBack(attack)
+	getKnockedBackByAttack(attack)
 	{
 		// Stop acceleration and set max velocity
 		this.body.setAcceleration(0, 0);
@@ -423,6 +440,27 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 		// Set knockback duration counter
 		this.knockbackDurationCounter = attack.KNOCKBACK_DURATION;
+	}
+
+	/** @param {Enemy} enemy */
+	getKnockedBackByCharge(enemy)
+	{
+		// Stop acceleration and set max velocity
+		this.body.setAcceleration(0, 0);
+		this.body.setMaxVelocity(enemy.CHARGE_KNOCKBACK_VELOCITY);
+
+		// Set trajectory
+		let dx = this.x - enemy.x;
+		let dy = this.y - enemy.y;
+		let magnitude = Math.sqrt(dx**2 + dy**2);
+		let moveMagnitudeX = dx / magnitude;
+		let moveMagnitudeY = dy / magnitude;
+		let velocityX = moveMagnitudeX * enemy.CHARGE_KNOCKBACK_VELOCITY;
+		let velocityY = moveMagnitudeY * enemy.CHARGE_KNOCKBACK_VELOCITY;
+		this.body.setVelocity(velocityX, velocityY);
+
+		// Set knockback duration counter
+		this.knockbackDurationCounter = enemy.CHARGE_KNOCKBACK_DURATION;
 	}
 
 	/** @param {number} amount */

@@ -22,6 +22,8 @@ class Enemy1 extends Enemy
 	attackBuildupDurationCounter = 0;
 	attackDurationCounter = 0;
 	attackCooldownCounter = 0;
+	playerX = 0;
+	playerY = 0;
 
 
 
@@ -85,7 +87,9 @@ class Enemy1 extends Enemy
 					this.body.setAcceleration(0, 0);
 					this.body.setVelocity(0, 0);
 
-					// Set attack buildup duration
+					// Set playerX, playerY, and attack buildup duration
+					this.playerX = this.scene.player.x;
+					this.playerY = this.scene.player.y;
 					this.attackBuildupDurationCounter = this.ATTACK_BUILDUP_DURATION;
 				}
 				else
@@ -140,8 +144,8 @@ class Enemy1 extends Enemy
 	attack()
 	{
 		// Set the position of the attack, capped by the range
-		let dx = this.scene.player.x - this.x;
-		let dy = this.scene.player.y - this.y;
+		let dx = this.playerX - this.x;
+		let dy = this.playerY - this.y;
 		let angle = Math.atan2(dy, dx);
 		dx = this.ATTACK_RANGE * Math.cos(angle);
 		dy = this.ATTACK_RANGE * Math.sin(angle);
@@ -150,7 +154,7 @@ class Enemy1 extends Enemy
 		this.attackSwipe.setPosition(x, y);
 
 		// Set the angle, visibility, and duration of the attack
-		let attackAngle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
+		let attackAngle = Phaser.Math.Angle.Between(this.x, this.y, this.playerX, this.playerY);
 		attackAngle = Phaser.Math.RadToDeg(attackAngle);
 		this.attackSwipe.setAngle(attackAngle);
 
