@@ -21,7 +21,7 @@ let config = {
 			debug: true
 		}
 	},
-	scene: [Load, Test]
+	scene: [Load, Test, Test_MapGen]
 }
 
 const SCALE = 2;

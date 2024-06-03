@@ -117,9 +117,15 @@ class Test extends Phaser.Scene
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
-		// debug key listener (assigned to D key)
+		// Debug key listener (assigned to D key)
 		this.input.keyboard.on('keydown-F', () => {
 			console.log("debug message");
+		});
+
+		// Map randomgen tester (assigned to Q key)
+		this.input.keyboard.on('keydown-Q', () => {
+			console.log("switched to map randomgen scene");
+			this.scene.start("testMapGenScene");
 		});
 	}
 

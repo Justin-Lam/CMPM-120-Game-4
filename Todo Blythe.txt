@@ -1,4 +1,4 @@
 implement temporary map with collisions and camera movement [DONE]
-implement collisions between enemy2 and map
-fix scaling
+fix scaling [DONE]
 do map random gen
+create starting area
