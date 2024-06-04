@@ -48,8 +48,10 @@ class EnemyTest extends Phaser.Scene
 		for (let poop of enemyPoops) {
 			this.enemyAttackGroup.add(poop);
 		}
-		this.enemyGroup = this.physics.add.group();
-		this.enemyGroup.add(new Enemy1(this, this.player.x + 1200, this.player.y));
+		this.enemyGroup = this.physics.add.group({
+			collideWorldBounds: true
+		});
+		this.enemyGroup.add(new Enemy3(this, this.player.x + 300, this.player.y));
 
 		// Create collision handlers
 		this.playerDashDisableColliders.push(this.physics.add.collider(this.player, this.enemyGroup, this.player_Enemy_Collision, null, this));

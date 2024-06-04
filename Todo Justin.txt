@@ -1,2 +1,1 @@
-birds don't collide with world bounds
 bug where enemies that die while attacking leaves an attack remnant

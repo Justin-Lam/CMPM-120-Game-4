@@ -36,11 +36,14 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		super(scene, x, y, texture, frame);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.setCollideWorldBounds(true);
+		// collides with world bounds needs to be set in the enemy group's config
 
 		// Set up body
 		this.setPushable(false);
 		this.setBodySize(this.displayWidth * this.BODY_SIZE_RATIO, this.displayHeight * this.BODY_SIZE_RATIO);
+
+		// Return instance
+		return this;
 	}
 
 	/** @param {number} delta */
