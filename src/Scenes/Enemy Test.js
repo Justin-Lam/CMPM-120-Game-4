@@ -68,12 +68,10 @@ class EnemyTest extends Phaser.Scene
 
 		// debug key listener (assigned to D key)
 		this.input.keyboard.on('keydown-F', () => {
-			if (this.cameras.main.zoom == 1) {
-				this.cameras.main.setZoom(0.5);
+			for (let enemy of this.enemyGroup.getChildren()) {
+				enemy.takeDamage(999);
 			}
-			else {
-				this.cameras.main.setZoom(1);
-			}
+			console.log(this.enemyGroup);
 		});
 	}
 

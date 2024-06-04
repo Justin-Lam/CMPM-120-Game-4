@@ -8,6 +8,14 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 	// Stats
 	health = 0;
 
+	// Attack Game Objects
+	attackGameObjects = [];
+
+	// Statuses
+	invulnerableToNetDurationCounter = 0;
+	knockbackDurationCounter = 0;
+	stunnedDurationCounter = 0;
+
 	// Patroling
 	state = "patrolling";
 	PATROL_MAX_VELOCITY = 100;
@@ -19,11 +27,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 	patrolMoveDurationCounter = 0;
 	patrolMoveCooldownCounter = 0;
 	patrolSurpriseDurationCounter = 0;
-
-	// Statuses
-	invulnerableToNetDurationCounter = 0;
-	knockbackDurationCounter = 0;
-	stunnedDurationCounter = 0;
 
 
 
@@ -207,6 +210,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		if (this.health <= 0)
 		{
 			this.health = 0;
+			for (let attackGameObject of this.attackGameObjects) {
+				attackGameObject.destroy();
+			}
 			this.destroy();
 		}
 	}

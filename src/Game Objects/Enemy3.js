@@ -54,6 +54,7 @@ class Enemy3 extends Enemy
 		this.attackSwipe.DAMAGE = this.ATTACK_DAMAGE;
 		this.attackSwipe.KNOCKBACK_VELOCITY = this.ATTACK_KNOCKBACK_VELOCITY;
 		this.attackSwipe.KNOCKBACK_DURATION = this.ATTACK_KNOCKBACK_DURATION;
+		this.attackGameObjects.push(this.attackSwipe);
 		this.scene.enemyAttackGroup.add(this.attackSwipe);
 
 		// Return instance
