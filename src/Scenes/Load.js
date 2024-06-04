@@ -30,6 +30,6 @@ class Load extends Phaser.Scene
 	create()
 	{
 		// Start the first scene
-		this.scene.start("testScene")
+		this.scene.start("enemyTestScene")
 	}
 }
