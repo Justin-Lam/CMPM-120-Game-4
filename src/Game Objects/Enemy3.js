@@ -6,14 +6,14 @@ class Enemy3 extends Enemy
 	MAX_HEALTH = 10;
 
 	// Charge
-	MAX_VELOCITY = 500;
-	ACCELERATION = this.MAX_VELOCITY * 10;
-	DRAG = this.ACCELERATION * 0.25;
+	CHARGE_MAX_VELOCITY = 500;
+	CHARGE_ACCELERATION = 1000;
+	CHARGE_DRAG = 500;
 	CHARGE_DAMAGE = 2;
 	CHARGE_KNOCKBACK_VELOCITY = 1500;
 	CHARGE_KNOCKBACK_DURATION = 0.25;				// in seconds
 	CHARGE_DURATION = 1;							// in seconds
-	CHARGE_COOLDOWN = 3;							// in seconds
+	CHARGE_COOLDOWN = 2;							// in seconds
 	chargeDurationCounter = 0;
 	chargeCooldownCounter = this.CHARGE_COOLDOWN;
 	moveMagnitudeX = 0;
@@ -28,7 +28,7 @@ class Enemy3 extends Enemy
 	ATTACK_DAMAGE = 4;
 	ATTACK_KNOCKBACK_VELOCITY = 1500;
 	ATTACK_KNOCKBACK_DURATION = 0.15;				// in seconds
-	ATTACK_BUILDUP_DURATION = 0.35;					// in seconds
+	ATTACK_BUILDUP_DURATION = 1;					// in seconds
 	ATTACK_DURATION = 0.5;							// in seconds
 	attackBuildupDurationCounter = 0;
 	attackDurationCounter = 0;
@@ -70,6 +70,10 @@ class Enemy3 extends Enemy
 
 	executeBehavior()
 	{
+		// Check that the enemy is engaging
+		if (this.state != "engaging" || this.patrolSurpriseDurationCounter > 0) {
+			return;
+		}
 		// Check that the enemy isn't stunned or being knocked back
 		if (this.stunnedDurationCounter > 0 || this.knockbackDurationCounter > 0) {
 			return;
@@ -97,12 +101,12 @@ class Enemy3 extends Enemy
 		this.moveMagnitudeY = dy / magnitude;
 
 		// Set max velocity
-		this.adjustedMaxVelocityX = Math.abs(this.MAX_VELOCITY * this.moveMagnitudeX);
-		this.adjustedMaxVelocityY = Math.abs(this.MAX_VELOCITY * this.moveMagnitudeY);
+		this.adjustedMaxVelocityX = Math.abs(this.CHARGE_MAX_VELOCITY * this.moveMagnitudeX);
+		this.adjustedMaxVelocityY = Math.abs(this.CHARGE_MAX_VELOCITY * this.moveMagnitudeY);
 
 		// Set acceleration
-		this.accelerationX = this.moveMagnitudeX * this.ACCELERATION;
-		this.accelerationY = this.moveMagnitudeY * this.ACCELERATION;
+		this.accelerationX = this.moveMagnitudeX * this.CHARGE_ACCELERATION;
+		this.accelerationY = this.moveMagnitudeY * this.CHARGE_ACCELERATION;
 
 		// Look in the direction of movement
 		if (Math.sign(dx) > 0) {
@@ -144,8 +148,8 @@ class Enemy3 extends Enemy
 			this.chargeDurationCounter -= delta/1000;
 			if (this.chargeDurationCounter <= 0) {
 				this.chargeDurationCounter = 0;
-				this.body.setAcceleration(0, 0);
-				this.body.setDrag(this.DRAG, this.DRAG);
+				this.body.setAcceleration(0);
+				this.body.setDrag(this.CHARGE_DRAG);
 				this.attackBuildupDurationCounter = this.ATTACK_BUILDUP_DURATION;
 			}
 		}
@@ -170,6 +174,9 @@ class Enemy3 extends Enemy
 				this.attackSwipe.angle = 0;
 				this.attackSwipe.setVisible(false);
 				this.chargeCooldownCounter = this.CHARGE_COOLDOWN;
+				if (!this.scene.cameras.main.worldView.contains(this.x, this.y)) {
+					this.state = "patrolling";
+				}
 			}
 		}
 		if (this.chargeCooldownCounter > 0)
