@@ -66,7 +66,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 			this.patrolMoveCooldownCounter = 0;
 			this.patrolSurpriseDurationCounter = this.PATROL_SURPRISE_DURATION;
 			this.state = "engaging";
-			console.log("spotted player");
 		}
 		else
 		{
@@ -124,7 +123,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 
 		// Set patrol move duration counter
 		this.patrolMoveDurationCounter = this.PATROL_MOVE_DURATION;
-		console.log("patrolling");
 	}
 
 	/** @param {number} delta */
@@ -156,10 +154,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 				this.patrolSurpriseDurationCounter = 0;
 				if (!this.scene.cameras.main.worldView.contains(this.x, this.y)) {
 					this.state = "patrolling";
-					console.log("resuming patrolling");
-				}
-				else {
-					console.log("engaging player");
 				}
 			}
 		}
