@@ -1,4 +1,4 @@
-class Test extends Phaser.Scene
+class CombatTest extends Phaser.Scene
 {
 	// VARIABLES:
 
@@ -16,7 +16,7 @@ class Test extends Phaser.Scene
 	// METHODS:
 	constructor()
 	{
-		super('testScene')
+		super('combatTestScene')
 	}
 
 	create()
@@ -68,9 +68,9 @@ class Test extends Phaser.Scene
 			this.enemyAttackGroup.add(poop);
 		}
 		this.enemyGroup = this.physics.add.group();
-		//this.enemyGroup.add(new Enemy1(this, 750, 200));
-		//this.enemyGroup.add(new Enemy1(this, 900, 600));
-		//this.enemyGroup.add(new Enemy2(this, 1200, 425));
+		this.enemyGroup.add(new Enemy1(this, 750, 200));
+		this.enemyGroup.add(new Enemy1(this, 900, 600));
+		this.enemyGroup.add(new Enemy2(this, 1200, 425));
 		this.enemyGroup.add(new Enemy3(this, 1200, 100));
 
 		// Creating layers that appear above player

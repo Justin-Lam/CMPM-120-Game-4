@@ -1,2 +1,2 @@
 birds don't collide with world bounds
-enemy1 follows for some time, then stops, then starts following again
+bug where enemies that die while attacking leaves an attack remnant
