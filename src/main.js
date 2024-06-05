@@ -21,7 +21,7 @@ let config = {
 			debug: true
 		}
 	},
-	scene: [Load, CombatTest, EnemyTest, Test_MapGen]
+	scene: [Load, CombatTest, DungeonFunctionalityTest, EnemyTest, Test_MapGen]
 }
 
 const SCALE = 2;

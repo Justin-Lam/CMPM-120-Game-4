@@ -469,14 +469,17 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		// Decrease health
 		this.health -= amount;
 
+		// Update health visual
+		this.scene.onPlayerDamaged();
+
 		// Check if the player died
 		if (this.health <= 0)
 		{
 			this.health = 0;
-			this.ACCELERATION = 0;
-		}
 
-		console.log("Player health: " + this.health);
+			this.ACCELERATION = 0;
+			this.setAngularVelocity(720);
+		}
 	}
 
 	/** @param {number} delta */

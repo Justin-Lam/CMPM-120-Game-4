@@ -1,1 +1,3 @@
-bug where enemies that die while attacking leaves an attack remnant
+
+
+Tune camera

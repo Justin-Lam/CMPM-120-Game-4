@@ -210,6 +210,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		if (this.health <= 0)
 		{
 			this.health = 0;
+			this.scene.onEnemyDeath();
 			for (let attackGameObject of this.attackGameObjects) {
 				attackGameObject.destroy();
 			}
