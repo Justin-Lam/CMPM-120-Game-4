@@ -6,6 +6,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	level = 1;
 	numEnemies = 0;
 	screen = "dungeon";
+	ENEMIES_PER_LEVEL = 2;
 	MIN_ENEMY_SPAWN_DIST_FROM_PLAYER = 300;
 
 	// World
@@ -206,7 +207,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 		// Spawn enemies
 		// amount of enemies spawned is equal to the value of the level
-		for (let i = 0; i < this.level; i++)
+		for (let i = 0; i < this.level * this.ENEMIES_PER_LEVEL - 1; i++)
 		{
 			// Randomly choose an enemy type
 			let enemyType = Phaser.Math.Between(1, 3);

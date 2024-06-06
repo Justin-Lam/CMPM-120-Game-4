@@ -33,19 +33,19 @@ class Player extends Phaser.Physics.Arcade.Sprite
 	NET_KNOCKBACK_VELOCITY = 500;
 	NET_KNOCKBACK_DURATION = 0.15;								// in seconds
 	NET_DURATION = 0.15;										// in seconds
-	NET_COOLDOWN = 1;											// in seconds
+	NET_COOLDOWN = 0.30;										// in seconds
 	netDurationCounter = 0;
 	netCooldownCounter = 0;
 
 	// Bread Gun 
 	/** @type {Phaser.Physics.Arcade.Group} */  breadGroup;
-	GUN_DAMAGE = 10;
-	GUN_RANGE = 300;											// in pixels
+	GUN_DAMAGE = 25;
+	GUN_RANGE = 400;											// in pixels
 	BREAD_VELOCITY = 500;
-	BREAD_KNOCKBACK_VELOCITY = 1000;
-	BREAD_KNOCKBACK_DURATION = 0.02;							// in seconds
-	GUN_MOVEMENT_IMPAIRMENT_DURATION = 0.3;						// in seconds
-	GUN_COOLDOWN = 0.75;										// in seconds
+	BREAD_KNOCKBACK_VELOCITY = 500;
+	BREAD_KNOCKBACK_DURATION = 0.25;							// in seconds
+	GUN_MOVEMENT_IMPAIRMENT_DURATION = 0.33;					// in seconds
+	GUN_COOLDOWN = 2;											// in seconds
 	gunMovementImpairmentDurationCounter = 0
 	gunCooldownCounter = 0;
 

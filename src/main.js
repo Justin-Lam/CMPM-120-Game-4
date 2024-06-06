@@ -18,7 +18,7 @@ let config = {
 				x: 0,
 				y: 0
 			},
-			debug: true
+			//debug: true
 		}
 	},
 	scene: [Load, CombatTest, DungeonFunctionalityTest, EnemyTest, Test_MapGen]
