@@ -28,24 +28,23 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 	// Net
 	/** @type {Phaser.Physics.Arcade.Sprite} */  netSwipe;
-	NET_DAMAGE = 2.0;
+	NET_DAMAGE = 15;
 	NET_RANGE = 50;												// in pixels
 	NET_KNOCKBACK_VELOCITY = 500;
 	NET_KNOCKBACK_DURATION = 0.15;								// in seconds
-	NET_STUN_DURATION = 0.3;									// in seconds
 	NET_DURATION = 0.15;										// in seconds
-	NET_COOLDOWN = 0.35;										// in seconds
+	NET_COOLDOWN = 1;											// in seconds
 	netDurationCounter = 0;
 	netCooldownCounter = 0;
 
 	// Bread Gun 
 	/** @type {Phaser.Physics.Arcade.Group} */  breadGroup;
-	GUN_DAMAGE = 1.0;
+	GUN_DAMAGE = 10;
 	GUN_RANGE = 300;											// in pixels
 	BREAD_VELOCITY = 500;
 	BREAD_KNOCKBACK_VELOCITY = 1000;
-	BREAD_KNOCKBACK_DURATION = 0.05;								// in seconds
-	GUN_MOVEMENT_IMPAIRMENT_DURATION = this.NET_DURATION;		// in seconds
+	BREAD_KNOCKBACK_DURATION = 0.02;							// in seconds
+	GUN_MOVEMENT_IMPAIRMENT_DURATION = 0.3;						// in seconds
 	GUN_COOLDOWN = 0.75;										// in seconds
 	gunMovementImpairmentDurationCounter = 0
 	gunCooldownCounter = 0;
@@ -514,6 +513,179 @@ class Player extends Phaser.Physics.Arcade.Sprite
 				this.body.setAcceleration(0, 0);
 				this.body.setVelocity(0, 0);
 			}
+		}
+	}
+
+	/** @param {string} upgrade    @param {string} type    @param {number} amount */
+	upgrade(upgrade, type, amount)
+	{
+		switch(upgrade)
+		{
+			case "max health":
+				if (type == "flat") {
+					this.MAX_HEALTH += amount;
+					this.health += amount;
+				}
+				else {
+					let change = this.MAX_HEALTH * amount - this.MAX_HEALTH;
+					this.MAX_HEALTH += change;
+					this.health += change;
+					this.MAX_HEALTH = Math.round(this.MAX_HEALTH);
+					this.health = Math.round(this.health);
+				}
+				break;
+
+			case "move speed":
+				if (type == "flat") {
+					this.MAX_VELOCITY += amount;
+				}
+				else {
+					this.MAX_VELOCITY *= amount;
+					this.MAX_VELOCITY = Math.round(this.MAX_VELOCITY);
+				}
+				break;
+
+			case "dash cooldown":
+				if (type == "flat") {
+					this.DASH_COOLDOWN -= amount;
+					this.DASH_COOLDOWN = Math.round(this.DASH_COOLDOWN * 100) / 100;
+				}
+				else {
+					this.DASH_COOLDOWN *= 1 - amount;
+					this.DASH_COOLDOWN = Math.round(this.DASH_COOLDOWN * 100) / 100;
+				}
+				break;
+
+			case "net damage":
+				if (type == "flat") {
+					this.NET_DAMAGE += amount;
+				}
+				else {
+					this.NET_DAMAGE *= amount;
+					this.NET_DAMAGE = Math.round(this.NET_DAMAGE);
+				}
+				this.netSwipe.DAMAGE = this.NET_DAMAGE;
+				break;
+
+			case "net range":
+				if (type == "flat") {
+					this.NET_RANGE += amount;
+				}
+				else {
+					this.NET_RANGE *= amount;
+					this.NET_RANGE = Math.round(this.NET_RANGE);
+				}
+				break;
+
+			case "net knockback":
+				if (type == "flat") {
+					this.NET_KNOCKBACK_VELOCITY += amount;
+				}
+				else {
+					this.NET_KNOCKBACK_VELOCITY *= amount;
+					this.NET_KNOCKBACK_VELOCITY = Math.round(this.NET_KNOCKBACK_VELOCITY);
+				}
+				this.netSwipe.KNOCKBACK_VELOCITY = this.NET_KNOCKBACK_VELOCITY;
+				break;
+
+			case "net cooldown":
+				if (type == "flat") {
+					this.NET_COOLDOWN -= amount;
+					this.NET_COOLDOWN = Math.round(this.NET_COOLDOWN * 100) / 100;
+				}
+				else {
+					this.NET_COOLDOWN *= 1 - amount;
+					this.NET_COOLDOWN = Math.round(this.NET_COOLDOWN * 100) / 100;
+				}
+				break;
+
+			case "net swing size":
+				if (type == "flat") {
+					this.netSwipe.scale += amount/100;
+					this.netSwipe.scale = Math.round(this.netSwipe.scale * 100) / 100;
+				}
+				else {
+					this.netSwipe.scale *= amount;
+					this.netSwipe.scale = Math.round(this.netSwipe.scale * 100) / 100;
+				}
+				break;
+
+			case "bread damage":
+				if (type == "flat") {
+					this.GUN_DAMAGE += amount;
+				}
+				else {
+					this.GUN_DAMAGE *= amount;
+					this.GUN_DAMAGE = Math.round(this.GUN_DAMAGE);
+				}
+				break;
+
+			case "bread range":
+				if (type == "flat") {
+					this.GUN_RANGE += amount;
+				}
+				else {
+					this.GUN_RANGE *= amount;
+					this.GUN_RANGE = Math.round(this.GUN_RANGE);
+				}
+				break;
+
+			case "bread velocity":
+				if (type == "flat") {
+					this.BREAD_VELOCITY += amount;
+				}
+				else {
+					this.BREAD_VELOCITY *= amount;
+					this.BREAD_VELOCITY = Math.round(this.BREAD_VELOCITY);
+				}
+				break;
+
+			case "bread knockback":
+				if (type == "flat") {
+					this.BREAD_KNOCKBACK_VELOCITY += amount;
+				}
+				else {
+					this.BREAD_KNOCKBACK_VELOCITY *= amount;
+					this.BREAD_KNOCKBACK_VELOCITY = Math.round(this.BREAD_KNOCKBACK_VELOCITY);
+				}
+				break;
+
+			case "bread cooldown":
+				if (type == "flat") {
+					this.GUN_COOLDOWN -= amount;
+					this.GUN_COOLDOWN = Math.round(this.GUN_COOLDOWN * 100) / 100;
+				}
+				else {
+					this.GUN_COOLDOWN *= 1 - amount;
+					this.GUN_COOLDOWN = Math.round(this.GUN_COOLDOWN * 100) / 100;
+				}
+				break;
+
+			case "bread size":
+				if (type == "flat") {
+					this.breadGroup.scaleXY(amount/100);
+				}
+				else {
+					this.breadGroup.scaleXY(this.breadGroup.getChildren()[0].scale * amount - this.breadGroup.getChildren()[0].scale);
+				}
+				break;
+
+			case "invincibility duration":
+				if (type == "flat") {
+					this.INVINCIBILITY_DURATION += amount;
+					this.INVINCIBILITY_DURATION = Math.round(this.INVINCIBILITY_DURATION * 100) / 100;
+					this.NUM_INVINCIBILITY_FLASHES += Math.round((2 * amount) / 0.25);
+				}
+				else {
+					let change = this.INVINCIBILITY_DURATION * amount - this.INVINCIBILITY_DURATION;
+					this.INVINCIBILITY_DURATION += change;
+					this.INVINCIBILITY_DURATION = Math.round(this.INVINCIBILITY_DURATION * 100) / 100;
+					this.NUM_INVINCIBILITY_FLASHES += Math.round((2 * change) / 0.25);
+				}
+				break;
+
+			default:
+				console.log("ERROR: Default switch case in Player.upgrade() was used.")
 		}
 	}
 }

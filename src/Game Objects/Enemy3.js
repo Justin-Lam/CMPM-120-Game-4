@@ -3,7 +3,7 @@ class Enemy3 extends Enemy
 	// VARIABLES:
 
 	// Stats
-	MAX_HEALTH = 10;
+	MAX_HEALTH = 85;
 
 	// Charge
 	CHARGE_MAX_VELOCITY = 500;
@@ -75,8 +75,8 @@ class Enemy3 extends Enemy
 		if (this.state != "engaging" || this.patrolSurpriseDurationCounter > 0) {
 			return;
 		}
-		// Check that the enemy isn't stunned or being knocked back
-		if (this.stunnedDurationCounter > 0 || this.knockbackDurationCounter > 0) {
+		// Check that the enemy isn't being knocked back
+		if (this.knockbackDurationCounter > 0) {
 			return;
 		}
 		// Check that the enemy isn't charging or attacking

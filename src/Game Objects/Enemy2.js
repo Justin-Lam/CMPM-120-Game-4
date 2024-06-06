@@ -3,7 +3,7 @@ class Enemy2 extends Enemy
 	// VARIABLES:
 
 	// Stats
-	MAX_HEALTH = 5;
+	MAX_HEALTH = 45;
 
 	// Move
 	FLEE_RANGE = 500;
@@ -64,8 +64,8 @@ class Enemy2 extends Enemy
 		if (this.state != "engaging" || this.patrolSurpriseDurationCounter > 0) {
 			return;
 		}
-		// Check that the enemy isn't stunned or being knocked back
-		if (this.stunnedDurationCounter > 0 || this.knockbackDurationCounter > 0) {
+		// Check that the enemy isn't being knocked back
+		if (this.knockbackDurationCounter > 0) {
 			return;
 		}
 		// Check that the enemy isn't attacking

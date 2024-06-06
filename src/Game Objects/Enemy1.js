@@ -3,7 +3,7 @@ class Enemy1 extends Enemy
 	// VARIABLES:
 
 	// Stats
-	MAX_HEALTH = 10;
+	MAX_HEALTH = 65;
 
 	// Chase
 	CHASE_VELOCITY = 200;
@@ -62,18 +62,18 @@ class Enemy1 extends Enemy
 	update(delta)
 	{
 		super.update(delta);
-		this.executeBehavior();
+		this.checkChase();
 		this.handleBehaviorCounters(delta);
 	}
 
-	executeBehavior()
+	checkChase()
 	{
 		// Check that the enemy is engaging
 		if (this.state != "engaging" || this.patrolSurpriseDurationCounter > 0) {
 			return;
 		}
-		// Check that the enemy isn't stunned or being knocked back
-		if (this.stunnedDurationCounter > 0 || this.knockbackDurationCounter > 0) {
+		// Check that the enemy isn't being knocked back
+		if (this.knockbackDurationCounter > 0) {
 			return;
 		}
 		// Check that the enemy isn't attacking
@@ -194,6 +194,8 @@ class Enemy1 extends Enemy
 		}
 		if (this.chaseCooldownCounter > 0)
 		{
+			this.checkAttack();
+
 			this.chaseCooldownCounter -= delta/1000;
 			if (this.chaseCooldownCounter <= 0) {
 				this.chaseCooldownCounter = 0;

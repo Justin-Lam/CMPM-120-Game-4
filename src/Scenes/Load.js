@@ -13,10 +13,13 @@ class Load extends Phaser.Scene
 		this.load.image("Player", "Player_temp.png");
 		this.load.image("Net Swipe", "Net Swipe_temp.png");
 		this.load.image("Bread", "Bread_temp.png");
+
 		this.load.image("Enemy1", "Enemy1_temp.png");
 		this.load.image("Enemy2", "Enemy2_temp.png");
 		this.load.image("Enemy Poop", "Enemy Poop_temp.png");
 		this.load.image("Enemy3", "Enemy3_temp.png");
+
+		this.load.image("Upgrade Frame", "Upgrade Frame_temp.png");
 
 		// Load map tilesets
 		this.load.image("urban_tiles", "urban_tilemap_packed_bigger.png"); 

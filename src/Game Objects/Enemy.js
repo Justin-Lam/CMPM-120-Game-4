@@ -14,7 +14,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 	// Statuses
 	invulnerableToNetDurationCounter = 0;
 	knockbackDurationCounter = 0;
-	stunnedDurationCounter = 0;
 
 	// Patroling
 	state = "patrolling";
@@ -173,7 +172,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 				return;
 			}
 			this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
-			this.stunnedDurationCounter = this.scene.player.NET_STUN_DURATION;
 		}
 		this.getKnockbacked(attack);
 		this.takeDamage(attack.DAMAGE);
@@ -232,15 +230,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 			}
 		}
 
-		// Stunned
-		if (this.stunnedDurationCounter > 0)
-		{
-			this.stunnedDurationCounter -= delta/1000;
-			if (this.stunnedDurationCounter < 0) {
-				this.stunnedDurationCounter = 0;
-			}
-		}
-
 		// Knockback
 		if (this.knockbackDurationCounter > 0)
 		{
@@ -252,6 +241,4 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 			}
 		}
 	}
-
-	executeBehavior() {}		// to be overwritten by the extend class
 }
