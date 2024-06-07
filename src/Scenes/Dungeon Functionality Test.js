@@ -55,6 +55,10 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		// Set world
 		this.physics.world.setBounds(0,0, this.WORLD_BOUNDS_X, this.WORLD_BOUNDS_Y);
 
+		// Create map
+		this.mapgen = new MapGen(this);
+		this.mapgen.create();
+
 		// Create player
 		this.player = new Player(this, 0, 0);
 

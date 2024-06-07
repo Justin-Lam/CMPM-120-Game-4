@@ -35,6 +35,7 @@ class Load extends Phaser.Scene
 
 		// Custom merged tilesets
 		this.load.image("floor_tiles", "flooring_tileset.png"); 
+		this.load.image("decor_tiles", "decor_tileset.png"); 
 
 		this.load.tilemapTiledJSON("basic-level-alt", "basic-level-alt.tmj");
 	}
