@@ -16,6 +16,8 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		// note: the "chance" variable acts more like a "weight" since all the chances don't need to add up to 100
 		{ upgrade: "max health", chance: 10,
 			minFlat: 1, maxFlat: 5, minPercent: 1.05, maxPercent: 1.25 },
+		{ upgrade: "regeneration", chance: 10000,
+			minFlat: 0.25, maxFlat: 2, minPercent: 1.1, maxPercent: 1.75 },
 		{ upgrade: "move speed", chance: 10,
 			minFlat: 10, maxFlat: 50, minPercent: 1.01, maxPercent: 1.1 },
 		{ upgrade: "dash cooldown", chance: 10,
@@ -147,18 +149,18 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		{
 			this.upgradeType = "flat";
 
-			if (upgradeText == "invincibility duration") {		// special case
+			if (upgradeText == "invincibility duration" || upgradeText == "regeneration") {						// special cases
 				let change = Phaser.Math.FloatBetween(this.upgrade.minFlat, this.upgrade.maxFlat);
 				let changeRounded = Math.round(change * 100) / 100;				// rounded to 2 decimal places
 				this.upgradeAmount = changeRounded;
 				this.upgradeDetailsText.setText(`Increase ${upgradeText} by ${this.upgradeAmount}`)
 			}
 
-			else if (this.upgrade.minPercent >= 1) {					// increase upgrade
+			else if (this.upgrade.minPercent >= 1) {															// increase upgrade
 				this.upgradeAmount = Phaser.Math.Between(this.upgrade.minFlat, this.upgrade.maxFlat);
 				this.upgradeDetailsText.setText(`Increase ${upgradeText} by ${this.upgradeAmount}`)
 			}
-			else {												// decrease upgrade
+			else {																								// decrease upgrade
 				let change = Phaser.Math.FloatBetween(this.upgrade.minFlat, this.upgrade.maxFlat);
 				let changeRounded = Math.round(change * 100) / 100;				// rounded to 2 decimal places
 				this.upgradeAmount = changeRounded;

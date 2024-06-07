@@ -5,6 +5,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 	// Stats
 	MAX_HEALTH = 10;
 	health = this.MAX_HEALTH;
+	HEALTH_REGEN = 1;
 
 	// Eight Direction Movement
 	/** @type {Phaser.Input.Keyboard.Key} */  upKey;
@@ -472,9 +473,6 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		// Decrease health
 		this.health -= amount;
 
-		// Update health visual
-		this.scene.onPlayerDamaged();
-
 		// Check if the player died
 		if (this.health <= 0)
 		{
@@ -487,6 +485,23 @@ class Player extends Phaser.Physics.Arcade.Sprite
 			this.netCooldownCounter = 999999;
 			this.gunCooldownCounter = 999999;
 		}
+
+		// Update health visual
+		this.scene.onPlayerHealthChanged();
+	}
+
+	regen()
+	{
+		// Increase health
+		this.health += this.HEALTH_REGEN;
+
+		// Check if the player overhealed
+		if (this.health > this.MAX_HEALTH) {
+			this.health = this.MAX_HEALTH;
+		}
+
+		// Update health visual
+		this.scene.onPlayerHealthChanged();
 	}
 
 	/** @param {number} delta */
@@ -541,6 +556,19 @@ class Player extends Phaser.Physics.Arcade.Sprite
 					this.MAX_HEALTH = Math.round(this.MAX_HEALTH);
 					this.health = Math.round(this.health);
 				}
+				break;
+
+			case "regeneration":
+				console.log(this.health, this.HEALTH_REGEN);
+				if (type == "flat") {
+					this.HEALTH_REGEN += amount;
+					this.HEALTH_REGEN = Math.round(this.HEALTH_REGEN * 100) / 100;
+				}
+				else {
+					this.HEALTH_REGEN *= amount;
+					this.HEALTH_REGEN = Math.round(this.HEALTH_REGEN * 100) / 100;
+				}
+				console.log(this.health, this.HEALTH_REGEN);
 				break;
 
 			case "move speed":
