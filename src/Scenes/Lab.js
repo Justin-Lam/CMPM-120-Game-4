@@ -10,7 +10,7 @@ class Lab extends Phaser.Scene
 		this.input.mouse.disableContextMenu();
 		
 		// Set world
-        this.physics.world.setBounds(0,0, 20*16*SCALE, 15*16*SCALE);
+        // this.physics.world.setBounds(0,0, 20*16*SCALE, 15*16*SCALE);
 
 		// Create map
 		this.createMap();
