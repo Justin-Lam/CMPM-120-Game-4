@@ -30,6 +30,7 @@ class Load extends Phaser.Scene
 		// Load map tilesets
 		this.load.image("urban_tiles", "urban_tilemap_packed_bigger.png"); 
 		this.load.image("rpg_tiles", "roguelikeSheet_transparent.png"); 
+		this.load.image("rpg_tiles_bigger", "roguelikeSheet_transparent_bigger.png"); 
 		this.load.image("shmup_tiles", "shmup_tiles_packed.png"); 
 		this.load.image("town_tiles", "town_tilemap_packed.png"); 
 
@@ -38,6 +39,7 @@ class Load extends Phaser.Scene
 		this.load.image("decor_tiles", "decor_tileset.png"); 
 
 		this.load.tilemapTiledJSON("basic-level-alt", "basic-level-alt.tmj");
+		this.load.tilemapTiledJSON("starting-area", "starting_area.tmj");
 	}
 
 	create()
