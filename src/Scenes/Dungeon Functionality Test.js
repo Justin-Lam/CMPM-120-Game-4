@@ -47,6 +47,15 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		super('dungeonFunctionalityTestScene')
 	}
 
+	init()
+	{
+		this.level = 1;
+		this.numEnemies = 0;
+		this.screen = "dungeon";
+		this.upgrades = [];
+		this.numUpgradesSelected = 0;
+	}
+
 	create()
 	{
 		// Disable context menu (thing that shows up when you right click)
