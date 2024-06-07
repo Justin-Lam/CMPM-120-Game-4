@@ -221,8 +221,10 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		}
 
 		// Disable collision
-		for (let collider of this.scene.playerDashDisableColliders) {
-			collider.active = false;
+		if (this.scene.playerDashDisableColliders != undefined) {
+			for (let collider of this.scene.playerDashDisableColliders) {
+				collider.active = false;
+			}
 		}
 
 		// Dash
@@ -242,8 +244,10 @@ class Player extends Phaser.Physics.Arcade.Sprite
 			this.dashDurationCounter -= delta/1000;
 			if (this.dashDurationCounter <= 0) {
 				this.dashDurationCounter = 0;
-				for (let collider of this.scene.playerDashDisableColliders) {
-					collider.active = true;
+				if (this.scene.playerDashDisableColliders != undefined) {
+					for (let collider of this.scene.playerDashDisableColliders) {
+						collider.active = true;
+					}
 				}
 				this.dashCooldownCounter = this.DASH_COOLDOWN;
 			}
@@ -475,9 +479,13 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		if (this.health <= 0)
 		{
 			this.health = 0;
+			this.scene.onPlayerDeath();
 
-			this.ACCELERATION = 0;
 			this.setAngularVelocity(720);
+			this.gunMovementImpairmentDurationCounter = 999999;
+			this.dashCooldownCounter = 999999;
+			this.netCooldownCounter = 999999;
+			this.gunCooldownCounter = 999999;
 		}
 	}
 

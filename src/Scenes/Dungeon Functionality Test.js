@@ -27,6 +27,8 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	/** @type {Phaser.GameObjects.Text} */  levelCompleteText;
 	/** @type {Phaser.GameObjects.Text} */  selectUpgradesText;
 	/** @type {Phaser.GameObjects.Text} */  nextLevelText;
+	/** @type {Phaser.GameObjects.Text} */  deathText;
+	/** @type {Phaser.GameObjects.Text} */  restartText;
 
 	// Player
 	/** @type {Player} */  player;
@@ -91,6 +93,9 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				}
 				this.numUpgradesSelected = 0;
 				this.startLevel();
+			}
+			else if (this.screen == "death") {
+				this.scene.restart();
 			}
 		});
 		this.input.keyboard.on('keydown-F', () => {			// debug
@@ -188,6 +193,16 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.nextLevelText.setAlign("center");
 		this.nextLevelText.setFontSize(20);
 		this.nextLevelText.setScrollFactor(0);
+		this.deathText = this.add.text(game.config.width/2, game.config.height/2 - 25, "You Died!")
+			.setOrigin(0.5)
+			.setAlign("center")
+			.setFontSize(60)
+			.setScrollFactor(0);
+		this.restartText = this.add.text(game.config.width/2, game.config.height/2 + 25, "(Press T to restart)")
+			.setOrigin(0.5)
+			.setAlign("center")
+			.setFontSize(20)
+			.setScrollFactor(0);
 	}
 	setCamera()
 	{
@@ -251,6 +266,8 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.levelCompleteText.setVisible(false);
 		this.selectUpgradesText.setVisible(false);
 		this.nextLevelText.setVisible(false);
+		this.deathText.setVisible(false);
+		this.restartText.setVisible(false);
 
 		// Set screen
 		this.screen = "dungeon";
@@ -260,6 +277,16 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	{
 		// Update player health text
 		this.playerHealthText.setText(`Health: ${this.player.health}/${this.player.MAX_HEALTH}`);
+	}
+
+	onPlayerDeath()
+	{
+		// Show death texts
+		this.deathText.setVisible(true);
+		this.restartText.setVisible(true);
+
+		// Set screen
+		this.screen = "death";
 	}
 
 	onEnemyDeath()

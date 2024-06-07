@@ -90,7 +90,8 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		}
 
 		// Set selection input
-		this.setInteractive().on("pointerdown", () => {
+		this.setInteractive();
+		this.on("pointerdown", () => {
 			if (!this.selected && this.scene.numUpgradesSelected < 2) {
 				this.selected = true;
 				this.setTint(0xdadada);

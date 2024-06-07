@@ -1,7 +1,6 @@
 class Load extends Phaser.Scene
 {
-	constructor()
-	{
+	constructor() {
 		super('loadScene')
 	}
 
@@ -9,6 +8,13 @@ class Load extends Phaser.Scene
 	{
 		// Set load path
 		this.load.path = './assets/';
+
+		// Load title screen stuff
+		this.load.image("Title", "Title_temp.png");
+		this.load.image("Start Game Button", "Start Game Button_temp.png");
+
+		// Load starting area stuff
+		this.load.image("Door", "Door_temp.png");
 
 		this.load.image("Player", "Player_temp.png");
 		this.load.image("Net Swipe", "Net Swipe_temp.png");
@@ -36,6 +42,6 @@ class Load extends Phaser.Scene
 	create()
 	{
 		// Start the first scene
-		this.scene.start("dungeonFunctionalityTestScene");
+		this.scene.start("titleScreenScene");
 	}
 }

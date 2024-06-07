@@ -67,6 +67,7 @@ class Enemy3 extends Enemy
 		super.update(delta);
 		this.executeBehavior();
 		this.handleBehaviorCounters(delta);
+		this.attackSwipe.setPosition(this.x, this.y);
 	}
 
 	executeBehavior()
