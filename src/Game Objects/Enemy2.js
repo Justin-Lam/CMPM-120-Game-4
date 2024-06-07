@@ -41,7 +41,7 @@ class Enemy2 extends Enemy
 	constructor(scene, x, y)
 	{
 		// Call superclass's constructor
-		super(scene, x, y, "Enemy2", 0);
+		super(scene, x, y, "poopybird_spritesheet", 0);
 
 		// Set stats
 		this.health = this.MAX_HEALTH;
@@ -110,6 +110,7 @@ class Enemy2 extends Enemy
 
 	move()
 	{
+		this.anims.play('enemy2_idle');
 		// Set max velocity
 		this.body.setMaxVelocity(this.MOVE_MAX_VELOCITY / Math.SQRT2);
 
@@ -159,6 +160,7 @@ class Enemy2 extends Enemy
 
 	attack()
 	{
+		this.anims.play('enemy2_attack');
 		// Get the first inactive poop
 		let poop = this.scene.enemy2PoopGroup.getFirstDead();
 		if (poop != null)

@@ -38,7 +38,7 @@ class Enemy1 extends Enemy
 	constructor(scene, x, y)
 	{
 		// Call superclass's constructor
-		super(scene, x, y, "Enemy1", 0);
+		super(scene, x, y, "duck_spritesheet", 0);
 
 		// Set stats and patrol
 		this.health = this.MAX_HEALTH;
@@ -91,6 +91,7 @@ class Enemy1 extends Enemy
 
 	chase()
 	{
+		this.anims.play('enemy1_idle');
 		// Set max velocity
 		this.body.setMaxVelocity(this.CHASE_VELOCITY);
 
@@ -153,6 +154,7 @@ class Enemy1 extends Enemy
 
 	attack()
 	{
+		this.anims.play('enemy1_attack');
 		// Set the position of the attack, capped by the range
 		let dx = this.playerX - this.x;
 		let dy = this.playerY - this.y;
@@ -232,6 +234,23 @@ class Enemy1 extends Enemy
 			if (this.attackCooldownCounter <= 0) {
 				this.attackCooldownCounter = 0;
 			}
+		}
+	}
+	takeDamage(amount)
+	{
+		this.anims.play('enemy1_hurt');
+		// Decrease health
+		this.health -= amount;
+
+		// Check if the enemy died
+		if (this.health <= 0)
+		{
+			this.health = 0;
+			this.scene.onEnemyDeath();
+			for (let attackGameObject of this.attackGameObjects) {
+				attackGameObject.destroy();
+			}
+			this.destroy();
 		}
 	}
 }

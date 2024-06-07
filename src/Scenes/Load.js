@@ -9,6 +9,14 @@ class Load extends Phaser.Scene
 		// Set load path
 		this.load.path = './assets/';
 
+		// Load spritesheet
+		this.load.spritesheet('duck_spritesheet', 'duck_spritesheet.png', {
+			frameWidth: 50, frameHeight: 50
+		});
+		this.load.spritesheet('poopybird_spritesheet', 'poopybird_spritesheet.png', {
+			frameWidth: 50, frameHeight: 50
+		});
+
 		// Load title screen stuff
 		this.load.image("Title", "Title_temp.png");
 		this.load.image("Start Game Button", "Start Game Button_temp.png");
@@ -20,8 +28,8 @@ class Load extends Phaser.Scene
 		this.load.image("Net Swipe", "Net Swipe_temp.png");
 		this.load.image("Bread", "Bread_temp.png");
 
-		this.load.image("Enemy1", "Enemy1_temp.png");
-		this.load.image("Enemy2", "Enemy2_temp.png");
+		//this.load.image("Enemy1", "Enemy1_temp.png");
+		//this.load.image("Enemy2", "Enemy2_temp.png");
 		this.load.image("Enemy Poop", "Enemy Poop_temp.png");
 		this.load.image("Enemy3", "Enemy3_temp.png");
 
@@ -44,6 +52,52 @@ class Load extends Phaser.Scene
 
 	create()
 	{
+		//duck animations
+		this.anims.create({
+            key: 'enemy1_idle',
+			frameRate: 1,
+			repeat: -1,
+            frames: [
+                { key: "duck_spritesheet", frame: 0 },
+				{ key: "duck_spritesheet", frame: 1 }
+            ]
+        });
+		this.anims.create({
+            key: 'enemy1_attack',
+			frameRate: 1,
+			repeat: -1,
+            frames: [
+                { key: "duck_spritesheet", frame: 2 }
+            ]
+        });
+		this.anims.create({
+            key: 'enemy1_hurt',
+			frameRate: 2,
+			repeat: -1,
+            frames: [
+                { key: "duck_spritesheet", frame: 3 }
+            ]
+        });
+
+		//poopybird animations
+		this.anims.create({
+            key: 'enemy2_idle',
+			frameRate: 1,
+			repeat: -1,
+            frames: [
+                { key: "poopybird_spritesheet", frame: 0 },
+				{ key: "poopybird_spritesheet", frame: 1 }
+            ]
+        });
+		this.anims.create({
+            key: 'enemy2_attack',
+			frameRate: 1,
+			repeat: -1,
+            frames: [
+                { key: "poopybird_spritesheet", frame: 2 },
+				{ key: "poopybird_spritesheet", frame: 3 }
+            ]
+        });
 		// Start the first scene
 		this.scene.start("titleScreenScene");
 	}
