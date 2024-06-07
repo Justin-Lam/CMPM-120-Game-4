@@ -73,6 +73,12 @@ class EnemyTest extends Phaser.Scene
 			}
 			console.log(this.enemyGroup);
 		});
+		
+		// Map randomgen tester (assigned to Q key)
+		this.input.keyboard.on('keydown-Q', () => {
+			console.log("switched to game test scene");
+			this.scene.start("combatTestScene");
+		});
 	}
 
 	update(time, delta)

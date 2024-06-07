@@ -43,7 +43,7 @@ class Test_MapGen extends Phaser.Scene
         // Map randomgen tester (assigned to Q key)
 		this.input.keyboard.on('keydown-Q', () => {
 			console.log("switched to game test scene");
-			this.scene.start("testScene");
+			this.scene.start("combatTestScene");
 		});
     }
 }
