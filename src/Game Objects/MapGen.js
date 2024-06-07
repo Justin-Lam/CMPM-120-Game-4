@@ -23,7 +23,9 @@ class MapGen
             {index: 7, weight: 10},
         ],
         COLLIDES: [
-            {},
+            {index: 1, weight: 0.2},
+            //{index: 2, weight: 0.1},
+            {index: 3, weight: 30},
         ],
         TREE_BORDERS: [
             {}
@@ -47,6 +49,7 @@ class MapGen
 
         this.generateFloor();
         this.generateDecor(); 
+        this.generateCollidables(); 
     }
 
     generateFloor() 
@@ -71,15 +74,36 @@ class MapGen
         this.map.weightedRandomize(this.TILES.DECOR, 0, 0, this.mapWidth, this.mapHeight, 'Decor');
     }
 
+    generateCollidables() 
+    {
+        this.collideTileset = this.map.addTilesetImage("collidables", "collide_tiles");
+        this.decorLayer = this.map.createBlankLayer('Collide', this.collideTileset);
+        this.decorLayer.setScale(SCALE * 1.5);
+        this.map.weightedRandomize(this.TILES.COLLIDES, 0, 0, this.mapWidth, this.mapHeight, 'Collide');
+
+        /*
+        let tileArray = this.layersToGrid();
+
+        for (let row of tileArray) {
+            for (let til of row) {
+                if (til != null && til != undefined)
+                {
+                    if (tileset.getTileProperties(til) != null && tileset.getTileProperties(til) != undefined) {
+                        let tileCost = tileset.getTileProperties(til).cost;
+                        this.finder.setTileCost(til, tileCost);
+                    }
+
+
+                }
+            }
+        } 
+        */
+    }
+
     /*
     generateTreeBorder() 
     {
         this.treeBorderTileset = this.map.addTilesetImage("tree-border-tileset", "tree_tiles"), 
-
-    }
-
-    generateCollidables() 
-    {
 
     }
     */
