@@ -78,7 +78,6 @@ class Lab extends Phaser.Scene
 
 	createInstructions()
 	{
-		this.wasdText = this.add.text(900, 400, "WASD\nto move")
 		// Create instructions
 		this.wasdText = this.add.text(400 + 0.75 * this.map.widthInPixels, 200 + 0.25 * this.map.heightInPixels, "WASD\nto move")
 			.setOrigin(0.5)
