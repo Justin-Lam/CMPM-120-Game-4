@@ -185,7 +185,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.levelText = this.add.text(10, 10, "Level: " + this.level);
 		this.levelText.setFontSize(30);
 		this.levelText.setScrollFactor(0);
-		this.playerHealthText = this.add.text(game.config.width-250, 10, `Health: ${this.player.health}/${this.player.MAX_HEALTH}`);
+		this.playerHealthText = this.add.text(game.config.width-250, 10, `Health: ${Math.ceil(this.player.health)}/${this.player.MAX_HEALTH}`);
 		this.playerHealthText.setFontSize(30);
 		this.playerHealthText.setScrollFactor(0);
 		this.enemiesRemainingText = this.add.text(10, 50, "Enemies Remaining: " + this.numEnemies);
@@ -233,6 +233,9 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		let playerSpawnY = Phaser.Math.Between(0 + this.player.displayHeight/2, this.physics.world.bounds.height - this.player.displayHeight/2);
 		this.player.setPosition(playerSpawnX, playerSpawnY);
 
+		// Regen player's health
+		this.player.regen();
+
 		// Spawn enemies
 		// amount of enemies spawned is equal to the value of the level
 		for (let i = 0; i < this.level * this.ENEMIES_PER_LEVEL - 1; i++)
@@ -274,7 +277,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 		// Set texts
 		this.levelText.setText("Level: " + this.level);
-		this.playerHealthText.setText(`Health: ${this.player.health}/${this.player.MAX_HEALTH}`);
+		this.playerHealthText.setText(`Health: ${Math.ceil(this.player.health)}/${this.player.MAX_HEALTH}`);
 		this.enemiesRemainingText.setText("Enemies Remaining: " + this.numEnemies);
 		this.levelCompleteText.setVisible(false);
 		this.selectUpgradesText.setVisible(false);
@@ -286,10 +289,10 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.screen = "dungeon";
 	}
 
-	onPlayerDamaged()
+	onPlayerHealthChanged()
 	{
 		// Update player health text
-		this.playerHealthText.setText(`Health: ${this.player.health}/${this.player.MAX_HEALTH}`);
+		this.playerHealthText.setText(`Health: ${Math.ceil(this.player.health)}/${this.player.MAX_HEALTH}`);
 	}
 
 	onPlayerDeath()
