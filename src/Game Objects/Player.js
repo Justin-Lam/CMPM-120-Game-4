@@ -232,6 +232,9 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		this.body.setMaxVelocity(this.DASH_VELOCITY, this.DASH_VELOCITY);
 		this.body.setVelocity(this.DASH_VELOCITY * this.moveMagnitudeX, this.DASH_VELOCITY * this.moveMagnitudeY);
 		this.dashDurationCounter = this.DASH_DURATION;
+
+		// Play sound
+		this.scene.sound.play("Dash");
 	}
 
 	/** @param {number} delta */
@@ -310,6 +313,9 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		this.netSwipe.setVisible(true);
 
 		this.netDurationCounter = this.NET_DURATION;
+
+		// Play sound
+		this.scene.sound.play("Net");
 	}
 
 	/** @param {number} delta */
@@ -373,6 +379,11 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		else {
 			console.log("NOTIFICATION: Attempted to get a bread from breadGroup but there were none that were inactive");
 		}
+
+		// Play sound
+		this.scene.sound.play("Bread", {
+			volume: 0.75
+		});
 	}
 
 	/** @param {number} delta */
@@ -478,6 +489,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		{
 			this.health = 0;
 			this.scene.onPlayerDeath();
+			this.scene.sound.play("Player Death");
 
 			this.setAngularVelocity(720);
 			this.gunMovementImpairmentDurationCounter = 999999;
@@ -488,6 +500,9 @@ class Player extends Phaser.Physics.Arcade.Sprite
 
 		// Update health visual
 		this.scene.onPlayerHealthChanged();
+
+		// Play sound
+		this.scene.sound.play("Player Damaged");
 	}
 
 	regen()

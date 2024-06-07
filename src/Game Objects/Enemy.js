@@ -209,6 +209,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite
 		{
 			this.health = 0;
 			this.scene.onEnemyDeath();
+			this.scene.sound.play("Bird Pacified");
 			for (let attackGameObject of this.attackGameObjects) {
 				attackGameObject.destroy();
 			}
