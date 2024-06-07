@@ -16,7 +16,7 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		// note: the "chance" variable acts more like a "weight" since all the chances don't need to add up to 100
 		{ upgrade: "max health", chance: 10,
 			minFlat: 1, maxFlat: 5, minPercent: 1.05, maxPercent: 1.25 },
-		{ upgrade: "regeneration", chance: 10000,
+		{ upgrade: "regeneration", chance: 10,
 			minFlat: 0.25, maxFlat: 2, minPercent: 1.1, maxPercent: 1.75 },
 		{ upgrade: "move speed", chance: 10,
 			minFlat: 10, maxFlat: 50, minPercent: 1.01, maxPercent: 1.1 },
@@ -98,11 +98,13 @@ class Upgrade extends Phaser.GameObjects.Sprite
 				this.selected = true;
 				this.setTint(0xdadada);
 				this.scene.numUpgradesSelected++;
+				this.scene.sound.play("Button Press");
 			}
 			else if (this.selected && this.scene.numUpgradesSelected > 0) {
 				this.selected = false;
 				this.clearTint();
 				this.scene.numUpgradesSelected--;
+				this.scene.sound.play("Button Press");
 			}
 		});
 

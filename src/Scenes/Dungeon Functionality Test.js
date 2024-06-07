@@ -86,6 +86,12 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		// Set Camera
 		this.setCamera();
 
+		// Play music
+		this.sound.play("Dungeon", {
+			volume: 0.25,
+			loop: true
+		});
+
 		// Start first level
 		this.startLevel();
 
@@ -99,6 +105,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				}
 				this.nextLevelText.setVisible(true);
 				this.screen = "upgrade";
+				this.sound.play("Dungeon Screen Change");
 			}
 			else if (this.screen == "upgrade") {
 				for (let upgrade of this.upgrades) {
@@ -106,16 +113,21 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				}
 				this.numUpgradesSelected = 0;
 				this.startLevel();
+				this.sound.play("Dungeon Screen Change");
 			}
 			else if (this.screen == "death") {
 				this.scene.restart();
+				this.sound.stopAll();
+				this.sound.play("Dungeon Screen Change");
 			}
 		});
+		/*
 		this.input.keyboard.on('keydown-F', () => {			// debug
 			for (let i = this.enemyGroup.getLength() - 1; i >= 0; i--) {
 				this.enemyGroup.getChildren()[i].takeDamage(999);
 			}
 		});
+		*/
 	}
 	createGroups()
 	{
@@ -325,6 +337,9 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 			// Increment level
 			this.level++;
+
+			// Play sound
+			this.sound.play("Level Complete");
 		}
 	}
 

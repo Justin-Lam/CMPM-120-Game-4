@@ -9,6 +9,13 @@ class TitleScreen extends Phaser.Scene
 		// Disable context menu (thing that shows up when you right click)
 		this.input.mouse.disableContextMenu();
 
+		// Play music
+		let music = this.sound.add("Title Screen", {
+			volume: 0.5,
+			loop: true
+		});
+		music.play();
+
 		// Set background
 		this.cameras.main.setBackgroundColor(0xfafafa);
 
@@ -25,7 +32,9 @@ class TitleScreen extends Phaser.Scene
 			startGameButton.clearTint();
 		});
 		startGameButton.on("pointerdown", () => {
-			this.scene.start("startingAreaScene");
+			music.stop();
+			this.sound.play("Button Press");
+			this.scene.start("labScene");
 		});
 	}
 }
