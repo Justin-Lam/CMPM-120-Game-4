@@ -72,7 +72,7 @@ class Lab extends Phaser.Scene
 		this.physics.add.overlap(this.player, this.door, () => {
 			this.music.stop();
 			this.sound.play("Door");
-			this.scene.start("dungeonFunctionalityTestScene");
+			this.scene.start("fieldScene");
 		});
 	}
 

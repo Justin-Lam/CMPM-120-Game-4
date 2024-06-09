@@ -1,4 +1,4 @@
-class DungeonFunctionalityTest extends Phaser.Scene
+class Field extends Phaser.Scene
 {
 	// VARIABLES:
 
@@ -44,7 +44,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	// METHODS:
 	constructor()
 	{
-		super('dungeonFunctionalityTestScene')
+		super("fieldScene");
 	}
 
 	init()
@@ -112,8 +112,14 @@ class DungeonFunctionalityTest extends Phaser.Scene
 					upgrade.upgradeAndHide();
 				}
 				this.numUpgradesSelected = 0;
-				this.startLevel();
 				this.sound.play("Dungeon Screen Change");
+
+				if (this.level < 10) {
+					this.startLevel();
+				}
+				else {
+					this.scene.start("ultrabirdFightScene", { player: this.player });
+				}
 			}
 			else if (this.screen == "death") {
 				this.scene.restart();
@@ -121,13 +127,11 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				this.sound.play("Dungeon Screen Change");
 			}
 		});
-		/*
 		this.input.keyboard.on('keydown-F', () => {			// debug
 			for (let i = this.enemyGroup.getLength() - 1; i >= 0; i--) {
 				this.enemyGroup.getChildren()[i].takeDamage(999);
 			}
 		});
-		*/
 	}
 	createGroups()
 	{

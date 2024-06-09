@@ -50,6 +50,9 @@ class Load extends Phaser.Scene
 		this.load.audio("Dungeon Screen Change", "Dungeon Screen Change.mp3");
 		this.load.audio("Dungeon", "Dungeon_temp.mp3");
 
+		// Load ultrabird stuff
+		this.load.image("Ultrabird", "Ultrabird_temp.png");
+
 		// Load map tilesets
 		this.load.image("urban_tiles", "urban_tilemap_packed_bigger.png"); 
 		this.load.image("rpg_tiles", "roguelikeSheet_transparent.png"); 
@@ -114,7 +117,9 @@ class Load extends Phaser.Scene
 				{ key: "poopybird_spritesheet", frame: 3 }
             ]
         });
+		
 		// Start the first scene
-		this.scene.start("titleScreenScene");
+		//this.scene.start("titleScreenScene");
+		this.scene.start("ultrabirdFightScene");
 	}
 }

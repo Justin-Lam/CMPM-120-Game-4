@@ -21,7 +21,7 @@ let config = {
 			//debug: true
 		}
 	},
-	scene: [Load, TitleScreen, Lab, CombatTest, DungeonFunctionalityTest, EnemyTest, Test_MapGen]
+	scene: [Load, TitleScreen, Lab, Field, UltrabirdFight, CombatTest, EnemyTest, Test_MapGen]
 }
 
 const SCALE = 2;

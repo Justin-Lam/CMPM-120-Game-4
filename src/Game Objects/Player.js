@@ -739,4 +739,39 @@ class Player extends Phaser.Physics.Arcade.Sprite
 				console.log("ERROR: Default switch case in Player.upgrade() was used.")
 		}
 	}
+
+	/** @param {Player} prevPlayer */
+	copy(prevPlayer)
+	{
+		this.MAX_HEALTH = prevPlayer.MAX_HEALTH;
+		this.health = this.MAX_HEALTH;
+		this.HEALTH_REGEN = prevPlayer.HEALTH_REGEN;
+
+		this.MAX_VELOCITY = prevPlayer.MAX_VELOCITY;
+		this.ACCELERATION = prevPlayer.ACCELERATION;
+		this.DRAG = prevPlayer.DRAG;
+		this.TURNING_ACCELERATION_MULTIPLIER = prevPlayer.TURNING_ACCELERATION_MULTIPLIER;
+
+		this.DASH_VELOCITY = prevPlayer.DASH_VELOCITY;
+		this.DASH_DURATION = prevPlayer.DASH_COOLDOWN;
+		this.DASH_COOLDOWN = prevPlayer.DASH_COOLDOWN;
+
+		this.NET_DAMAGE = prevPlayer.NET_DAMAGE;
+		this.NET_RANGE = prevPlayer.NET_RANGE;
+		this.NET_KNOCKBACK_VELOCITY = prevPlayer.NET_KNOCKBACK_VELOCITY;
+		this.NET_KNOCKBACK_DURATION = prevPlayer.NET_KNOCKBACK_DURATION;
+		this.NET_DURATION = prevPlayer.NET_DURATION;
+		this.NET_COOLDOWN = prevPlayer.NET_COOLDOWN;
+
+		this.GUN_DAMAGE = prevPlayer.GUN_DAMAGE;
+		this.GUN_RANGE = prevPlayer.GUN_RANGE;
+		this.BREAD_VELOCITY = prevPlayer.BREAD_VELOCITY;
+		this.BREAD_KNOCKBACK_VELOCITY = prevPlayer.BREAD_KNOCKBACK_VELOCITY;
+		this.BREAD_KNOCKBACK_DURATION = prevPlayer.BREAD_KNOCKBACK_DURATION;
+		this.GUN_MOVEMENT_IMPAIRMENT_DURATION = prevPlayer.GUN_MOVEMENT_IMPAIRMENT_DURATION;
+		this.GUN_COOLDOWN = prevPlayer.GUN_COOLDOWN;
+
+		this.INVINCIBILITY_DURATION = prevPlayer.INVINCIBILITY_DURATION;
+		this.NUM_INVINCIBILITY_FLASHES = prevPlayer.NUM_INVINCIBILITY_FLASHES;
+	}
 }
