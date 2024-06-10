@@ -91,7 +91,9 @@ class Enemy1 extends Enemy
 
 	chase()
 	{
-		this.anims.play('enemy1_idle');
+		if(this.anims.getName() != 'enemy1_attack' && this.anims.getName() != 'enemy1_hurt'){
+			this.anims.play('enemy1_idle');
+		}
 		// Set max velocity
 		this.body.setMaxVelocity(this.CHASE_VELOCITY);
 
@@ -154,7 +156,11 @@ class Enemy1 extends Enemy
 
 	attack()
 	{
+		this.scene.sound.play("duck_quack", {
+			volume: 1
+		});
 		this.anims.play('enemy1_attack');
+		this.playAfterDelay('enemy1_idle', 30);
 		// Set the position of the attack, capped by the range
 		let dx = this.playerX - this.x;
 		let dy = this.playerY - this.y;
@@ -236,21 +242,17 @@ class Enemy1 extends Enemy
 			}
 		}
 	}
-	takeDamage(amount)
+	getHitByAttack(attack, attackType)
 	{
 		this.anims.play('enemy1_hurt');
-		// Decrease health
-		this.health -= amount;
-
-		// Check if the enemy died
-		if (this.health <= 0)
-		{
-			this.health = 0;
-			this.scene.onEnemyDeath();
-			for (let attackGameObject of this.attackGameObjects) {
-				attackGameObject.destroy();
+		this.playAfterDelay('enemy1_idle', 70);
+		if (attackType == "net") {
+			if (this.invulnerableToNetDurationCounter > 0) {
+				return;
 			}
-			this.destroy();
+			this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
 		}
+		this.getKnockbacked(attack);
+		this.takeDamage(attack.DAMAGE);
 	}
 }

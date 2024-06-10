@@ -41,13 +41,14 @@ class Enemy3 extends Enemy
 	constructor(scene, x, y)
 	{
 		// Call superclass's constructor
-		super(scene, x, y, "Enemy3", 0);
+		super(scene, x, y, "roadrunner_spritesheet", 0);
+		this.setScale(2);
 
 		// Set stats
 		this.health = this.MAX_HEALTH;
 
 		// Set attack
-		this.attackSwipe = scene.physics.add.sprite(-100, -100, "Net Swipe", 0);
+		this.attackSwipe = scene.physics.add.sprite(-100, -100, "Bird Swipe", 0);
 		this.attackSwipe.setVisible(false);
 		this.attackSwipe.setScale(3);
 		this.attackSwipe.owner = this;
@@ -72,6 +73,9 @@ class Enemy3 extends Enemy
 
 	executeBehavior()
 	{
+		if(this.anims.getName() != 'enemy3_charge' && this.anims.getName() != 'enemy3_attack' && this.anims.getName() != 'enemy3_hurt'){
+			this.anims.play('enemy3_idle');
+		}
 		// Check that the enemy is engaging
 		if (this.state != "engaging" || this.patrolSurpriseDurationCounter > 0) {
 			return;
@@ -95,6 +99,10 @@ class Enemy3 extends Enemy
 
 	charge()
 	{
+		this.anims.play('enemy3_charge');
+		this.scene.sound.play("roadrunner_run", {
+			volume: 1
+		});
 		// Get move magnitudes
 		let dx = this.scene.player.x - this.x;
 		let dy = this.scene.player.y - this.y;
@@ -120,10 +128,14 @@ class Enemy3 extends Enemy
 
 		// Set charge duration counter
 		this.chargeDurationCounter = this.CHARGE_DURATION;
+		this.playAfterDelay('enemy3_idle', 1650);
 	}
 
 	attack()
 	{
+		this.scene.sound.play("roadrunner_attack", {
+			volume: 1
+		});
 		// Set the position, angle, visibility, and duration of the attack
 		this.attackSwipe.setPosition(this.x, this.y);
 		let attackAngle = Phaser.Math.Angle.Between(this.x, this.y, this.x + this.moveMagnitudeX, this.y + this.moveMagnitudeY);
@@ -131,6 +143,8 @@ class Enemy3 extends Enemy
 		this.attackSwipe.setAngle(attackAngle);
 		this.attackSwipe.setVisible(true);
 		this.attackDurationCounter = this.ATTACK_DURATION;
+		this.anims.play('enemy3_attack');
+		this.playAfterDelay('enemy3_idle', 500);
 	}
 
 	/** @param {number} delta */
@@ -189,5 +203,18 @@ class Enemy3 extends Enemy
 				this.chargeCooldownCounter = 0;
 			}
 		}
+	}
+	getHitByAttack(attack, attackType)
+	{
+		this.anims.play('enemy3_hurt');
+		this.playAfterDelay('enemy3_idle', 70);
+		if (attackType == "net") {
+			if (this.invulnerableToNetDurationCounter > 0) {
+				return;
+			}
+			this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
+		}
+		this.getKnockbacked(attack);
+		this.takeDamage(attack.DAMAGE);
 	}
 }

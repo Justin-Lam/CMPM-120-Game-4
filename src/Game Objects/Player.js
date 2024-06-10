@@ -64,7 +64,8 @@ class Player extends Phaser.Physics.Arcade.Sprite
 	constructor(scene, x, y)
 	{
 		// Do necessary initial stuff
-		super(scene, x, y, "Player", 0);
+		super(scene, x, y, "player_spritesheet", 1);
+		this.setScale(1.5);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.setCollideWorldBounds(true);
@@ -117,7 +118,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 			active: false,
 			visible: false
 		});
-
+		this.animationRunning = false;
 		// Return instance
 		return this;
 	}
@@ -153,15 +154,19 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		this.moveMagnitudeY = moveDirectionY;
 		if (this.upKey.isDown) {													// up
 			moveDirectionY = -1;
+			this.anims.play("walk_up", true);
 		}
 		if (this.leftKey.isDown) {													// left
 			moveDirectionX = -1;
+			this.anims.play("walk_left", true);
 		}
 		if (this.downKey.isDown) {													// down
 			moveDirectionY = 1;
+			this.anims.play("walk_down", true);
 		}
 		if (this.rightKey.isDown) {													// right
 			moveDirectionX = 1;
+			this.anims.play("walk_right", true);
 		}
 
 		// Execute movement
@@ -197,9 +202,15 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		}
 		else																		// idle
 		{
+			this.anims.play("idle");
 			this.body.setAcceleration(0, 0);
 			this.body.setDrag(this.DRAG, this.DRAG);
 		}
+		/*if(this.anims.getName() != 'idle'){
+			this.scene.sound.play("footsteps", {
+				volume: 0.5
+			});
+		}*/
 	}
 
 	dash()
@@ -309,6 +320,18 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		let angle = Phaser.Math.Angle.Between(this.x, this.y, pointer.x, pointer.y);
 		angle = Phaser.Math.RadToDeg(angle);
 		this.netSwipe.setAngle(angle);
+
+		// Randomize net swipe effect
+		let randNum = Math.random();
+		if(randNum < 0.3){
+			this.netSwipe.setTexture('Net Swipe');
+		}
+		else if(randNum < 0.6){
+			this.netSwipe.setTexture('Net Swipe 2');
+		}
+		else{
+			this.netSwipe.setTexture('Net Swipe 3');
+		}
 
 		this.netSwipe.setVisible(true);
 

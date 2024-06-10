@@ -376,6 +376,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 			bread.deactivate();
 			enemy.getHitByAttack(bread, "bread");
 		}
+		console.log("bread");
 	}
 	/** @param {Player} player    @param {Phaser.Physics.Arcade.Sprite} attack */
 	enemyAttack_Player_Collision(player, attack)

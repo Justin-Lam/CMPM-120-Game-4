@@ -42,6 +42,7 @@ class Enemy2 extends Enemy
 	{
 		// Call superclass's constructor
 		super(scene, x, y, "poopybird_spritesheet", 0);
+		this.setScale(1.25);
 
 		// Set stats
 		this.health = this.MAX_HEALTH;
@@ -110,7 +111,9 @@ class Enemy2 extends Enemy
 
 	move()
 	{
-		this.anims.play('enemy2_idle');
+		if(this.anims.getName() != 'enemy2_attack' && this.anims.getName() != 'enemy2_hurt'){
+			this.anims.play('enemy2_idle');
+		}
 		// Set max velocity
 		this.body.setMaxVelocity(this.MOVE_MAX_VELOCITY / Math.SQRT2);
 
@@ -160,7 +163,10 @@ class Enemy2 extends Enemy
 
 	attack()
 	{
-		this.anims.play('enemy2_attack');
+		if(this.anims.getName() != 'enemy2_hurt'){
+			this.anims.play('enemy2_attack');
+		}
+		this.playAfterDelay('enemy2_idle', 70);
 		// Get the first inactive poop
 		let poop = this.scene.enemy2PoopGroup.getFirstDead();
 		if (poop != null)
@@ -235,5 +241,18 @@ class Enemy2 extends Enemy
 				this.attackCooldownCounter = 0;
 			}
 		}
+	}
+	getHitByAttack(attack, attackType)
+	{
+		this.anims.play('enemy2_hurt');
+		this.playAfterDelay('enemy2_idle', 70);
+		if (attackType == "net") {
+			if (this.invulnerableToNetDurationCounter > 0) {
+				return;
+			}
+			this.invulnerableToNetDurationCounter = this.scene.player.NET_DURATION;
+		}
+		this.getKnockbacked(attack);
+		this.takeDamage(attack.DAMAGE);
 	}
 }
