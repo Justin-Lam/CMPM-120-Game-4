@@ -72,6 +72,10 @@ class Load extends Phaser.Scene
 		this.load.image("decor_tiles", "decor_tileset.png"); 
 		this.load.image("collide_tiles", "collidables_spritesheet.png"); 
 
+		this.load.tilemapTiledJSON("tree_border1", "tree-borders1.tmj");
+		this.load.tilemapTiledJSON("tree_border2", "tree-borders2.tmj"); 
+		this.load.tilemapTiledJSON("tree_border3", "tree-borders3.tmj"); 
+
 		this.load.tilemapTiledJSON("basic-level-alt", "basic-level-alt.tmj");
 		this.load.tilemapTiledJSON("starting-area", "starting_area_alt.tmj");
 	}

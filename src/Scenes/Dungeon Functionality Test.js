@@ -12,6 +12,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	// World
 	WORLD_BOUNDS_X = 1920;
 	WORLD_BOUNDS_Y = 1080;
+	environmentCollisions = [];
 
 	// Upgrades
 	upgrades = [];
@@ -39,7 +40,6 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	/** @type {Phaser.Physics.Arcade.Group} */  enemy2PoopGroup;
 	/** @type {Phaser.Physics.Arcade.Group} */  enemyGroup;
 
-
 	
 	// METHODS:
 	constructor()
@@ -66,10 +66,10 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 		// Create map
 		this.mapgen = new MapGen(this);
-		this.mapgen.create();
 
 		// Create player
 		this.player = new Player(this, 0, 0);
+		this.player.depth = 4;
 
 		// Create groups
 		this.createGroups();
@@ -87,10 +87,12 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.setCamera();
 
 		// Play music
-		this.sound.play("Dungeon", {
+		this.music = this.sound.add("Dungeon", {
 			volume: 0.25,
 			loop: true
 		});
+
+		this.music.play();
 
 		// Start first level
 		this.startLevel();
@@ -102,6 +104,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				this.selectUpgradesText.setVisible(false);
 				for (let upgrade of this.upgrades) {
 					upgrade.setAndShow();
+					upgrade.depth = 15;
 				}
 				this.nextLevelText.setVisible(true);
 				this.screen = "upgrade";
@@ -121,13 +124,13 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				this.sound.play("Dungeon Screen Change");
 			}
 		});
-		/*
+
+		// FOR TESTING
 		this.input.keyboard.on('keydown-F', () => {			// debug
 			for (let i = this.enemyGroup.getLength() - 1; i >= 0; i--) {
 				this.enemyGroup.getChildren()[i].takeDamage(999);
 			}
 		});
-		*/
 	}
 	createGroups()
 	{
@@ -162,7 +165,6 @@ class DungeonFunctionalityTest extends Phaser.Scene
 	}
 	createUpgrades()
 	{
-		
 		for (let i = 0; i < this.NUM_UPGRADES; i++)
 		{
 			// Create upgrade
@@ -197,37 +199,45 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.levelText = this.add.text(10, 10, "Level: " + this.level);
 		this.levelText.setFontSize(30);
 		this.levelText.setScrollFactor(0);
+		this.levelText.depth = 20;
 		this.playerHealthText = this.add.text(game.config.width-250, 10, `Health: ${Math.ceil(this.player.health)}/${this.player.MAX_HEALTH}`);
 		this.playerHealthText.setFontSize(30);
 		this.playerHealthText.setScrollFactor(0);
+		this.playerHealthText.depth = 20;
 		this.enemiesRemainingText = this.add.text(10, 50, "Enemies Remaining: " + this.numEnemies);
 		this.enemiesRemainingText.setFontSize(30);
 		this.enemiesRemainingText.setScrollFactor(0);
+		this.enemiesRemainingText.depth = 20;
 		this.levelCompleteText = this.add.text(game.config.width/2, game.config.height/2 - 25, "Level Complete!");
 		this.levelCompleteText.setOrigin(0.5);
 		this.levelCompleteText.setAlign("center");
 		this.levelCompleteText.setFontSize(60);
 		this.levelCompleteText.setScrollFactor(0);
+		this.levelCompleteText.depth = 20;
 		this.selectUpgradesText = this.add.text(game.config.width/2, game.config.height/2 + 25, "(Press T to select upgrades)");
 		this.selectUpgradesText.setOrigin(0.5);
 		this.selectUpgradesText.setAlign("center");
 		this.selectUpgradesText.setFontSize(20);
 		this.selectUpgradesText.setScrollFactor(0);
+		this.selectUpgradesText.depth = 20;
 		this.nextLevelText = this.add.text(game.config.width/2, game.config.height/2 + 285, "(Press T to begin next level)");
 		this.nextLevelText.setOrigin(0.5);
 		this.nextLevelText.setAlign("center");
 		this.nextLevelText.setFontSize(20);
 		this.nextLevelText.setScrollFactor(0);
+		this.nextLevelText.depth = 20;
 		this.deathText = this.add.text(game.config.width/2, game.config.height/2 - 25, "You Died!")
 			.setOrigin(0.5)
 			.setAlign("center")
 			.setFontSize(60)
 			.setScrollFactor(0);
+		this.deathText.depth = 20;
 		this.restartText = this.add.text(game.config.width/2, game.config.height/2 + 25, "(Press T to restart)")
 			.setOrigin(0.5)
 			.setAlign("center")
 			.setFontSize(20)
 			.setScrollFactor(0);
+		this.restartText.depth = 20;
 	}
 	setCamera()
 	{
@@ -240,10 +250,14 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 	startLevel()
 	{
+		// Generate new map
+		this.mapgen.create();
+
 		// Spawn player in a random place
 		let playerSpawnX = Phaser.Math.Between(0 + this.player.displayWidth/2, this.physics.world.bounds.width - this.player.displayWidth/2);
 		let playerSpawnY = Phaser.Math.Between(0 + this.player.displayHeight/2, this.physics.world.bounds.height - this.player.displayHeight/2);
 		this.player.setPosition(playerSpawnX, playerSpawnY);
+		//this.player.setPosition(360, 360);
 
 		// Regen player's health
 		this.player.regen();
@@ -282,10 +296,14 @@ class DungeonFunctionalityTest extends Phaser.Scene
 				enemySpawnDistFromPlayer = Math.sqrt(dx**2 + dy**2);
 			}
 			enemy.setPosition(enemySpawnX, enemySpawnY);
+			enemy.depth = 5;
 
 			// Increment num enemies
 			this.numEnemies++;
 		}
+
+		// Collisions
+		this.createEnvironmentColliders();
 
 		// Set texts
 		this.levelText.setText("Level: " + this.level);
@@ -299,6 +317,24 @@ class DungeonFunctionalityTest extends Phaser.Scene
 
 		// Set screen
 		this.screen = "dungeon";
+	}
+
+	createEnvironmentColliders()
+	{
+		if (this.environmentCollisions != [] || this.environmentCollisions.length != 0)
+		{
+			for (let collider of this.environmentCollisions)
+			{
+				collider.destroy();
+			}
+		}
+
+		this.environmentCollisions = [];
+
+		this.environmentCollisions.push(this.physics.add.collider(this.player, this.mapgen.treeBaseLayer));
+		this.environmentCollisions.push(this.physics.add.collider(this.player, this.mapgen.collideLayer));
+		this.environmentCollisions.push(this.physics.add.collider(this.enemyGroup, this.mapgen.treeBaseLayer));
+		this.environmentCollisions.push(this.physics.add.collider(this.enemyGroup, this.mapgen.collideLayer));
 	}
 
 	onPlayerHealthChanged()
@@ -328,6 +364,12 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		// Check if all enemies have died
 		if (this.numEnemies <= 0)
 		{
+			if (this.level == 10) // Check if this is the last level
+			{
+				this.music.stop();
+				this.scene.start("endScene");
+			}
+
 			// Show level complete texts
 			this.levelCompleteText.setVisible(true);
 			this.selectUpgradesText.setVisible(true);

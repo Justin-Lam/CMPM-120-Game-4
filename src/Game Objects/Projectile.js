@@ -29,6 +29,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite
 		this.setActive(true);
 		this.setVisible(true);
 		this.setPosition(startX, startY);
+		this.depth = 6;
 
 		// Set the trajectory of the bread
 		let dx = targetX - startX;

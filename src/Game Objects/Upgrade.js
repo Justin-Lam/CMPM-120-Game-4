@@ -46,9 +46,6 @@ class Upgrade extends Phaser.GameObjects.Sprite
 			minFlat: 50, maxFlat: 150, minPercent: 1.25, maxPercent: 2 },
 		{ upgrade: "invincibility duration", chance: 5,
 			minFlat: 0.05, maxFlat: 0.2, minPercent: 1.1, maxPercent: 1.5 }
-		
-		// regen?
-		// life steal / on hit heal?
 	];
 
 
@@ -74,6 +71,7 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		this.upgradeText.setFontSize(20);
 		this.upgradeText.setColor("black");
 		this.upgradeText.setScrollFactor(0);
+		this.upgradeText.depth = 20;
 		this.upgradeText.setVisible(false);
 
 		this.upgradeDetailsText = scene.add.text(0, 0, "", {
@@ -84,6 +82,7 @@ class Upgrade extends Phaser.GameObjects.Sprite
 		this.upgradeDetailsText.setFontSize(20);
 		this.upgradeDetailsText.setColor("black");
 		this.upgradeDetailsText.setScrollFactor(0);
+		this.upgradeDetailsText.depth = 20;
 		this.upgradeDetailsText.setVisible(false);
 
 		// Set total chance

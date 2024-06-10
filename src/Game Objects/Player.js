@@ -99,6 +99,7 @@ class Player extends Phaser.Physics.Arcade.Sprite
 		});
 
 		this.netSwipe = scene.physics.add.sprite(-100, -100, "Net Swipe", 0);
+		this.netSwipe.depth = 6;
 		this.netSwipe.setVisible(false);
 		this.netSwipe.owner = this;
 		this.netSwipe.KNOCKBACK_VELOCITY = this.NET_KNOCKBACK_VELOCITY;
