@@ -36,7 +36,7 @@ class End extends Phaser.Scene
 Environmental assets: Kenney Assets
 Music: 
 Angry Birds (Title screen), Undertale (Lab + credits), Tamagotchi (Field)
-Sound effects: Scratch, Chiptone`)
+Sound effects: Scratch, Chiptone, Pixabay`)
 			.setOrigin(0.5)
 			.setAlign("center")
 			.setFontSize(20)

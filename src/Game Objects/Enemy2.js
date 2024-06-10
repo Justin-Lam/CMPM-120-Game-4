@@ -163,6 +163,9 @@ class Enemy2 extends Enemy
 
 	attack()
 	{
+		this.scene.sound.play("pigeon_poop", {
+			volume: 0.5
+		});
 		if(this.anims.getName() != 'enemy2_hurt'){
 			this.anims.play('enemy2_attack');
 		}
@@ -254,5 +257,24 @@ class Enemy2 extends Enemy
 		}
 		this.getKnockbacked(attack);
 		this.takeDamage(attack.DAMAGE);
+	}
+	takeDamage(amount)
+	{
+		// Decrease health
+		this.health -= amount;
+
+		// Check if the enemy died
+		if (this.health <= 0)
+		{
+			this.health = 0;
+			this.scene.onEnemyDeath();
+			this.scene.sound.play("pigeon_die", {
+				volume: 0.15
+			});
+			for (let attackGameObject of this.attackGameObjects) {
+				attackGameObject.destroy();
+			}
+			this.destroy();
+		}
 	}
 }

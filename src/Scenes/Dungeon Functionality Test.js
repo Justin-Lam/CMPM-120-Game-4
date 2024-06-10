@@ -220,7 +220,7 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.selectUpgradesText.setFontSize(20);
 		this.selectUpgradesText.setScrollFactor(0);
 		this.selectUpgradesText.depth = 20;
-		this.nextLevelText = this.add.text(game.config.width/2, game.config.height/2 + 285, "(Press T to begin next level)");
+		this.nextLevelText = this.add.text(game.config.width/2, game.config.height/2 + 285, "(Select up to 2 upgrades, then press T to begin next level)");
 		this.nextLevelText.setOrigin(0.5);
 		this.nextLevelText.setAlign("center");
 		this.nextLevelText.setFontSize(20);

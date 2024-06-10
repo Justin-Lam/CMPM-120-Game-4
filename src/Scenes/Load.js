@@ -53,6 +53,8 @@ class Load extends Phaser.Scene
 		this.load.audio("duck_quack", "duck_quack.mp3");
 		this.load.audio("roadrunner_attack", "roadrunner_attack.mp3");
 		this.load.audio("roadrunner_run", "roadrunner_run.mp3");
+		this.load.audio("pigeon_poop", "pigeon_poop.mp3");
+		this.load.audio("pigeon_die", "pigeon_die.mp3");
 
 		// Load dungeon stuff
 		this.load.image("Upgrade Frame", "Upgrade Frame_temp.png");
