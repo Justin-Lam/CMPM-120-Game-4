@@ -159,6 +159,9 @@ class DungeonFunctionalityTest extends Phaser.Scene
 		this.physics.add.collider(this.enemyGroup, this.enemyGroup);
 		this.physics.add.overlap(this.player.netSwipe, this.enemyGroup, this.netSwipe_Enemy_Collision, null, this);
 		this.physics.add.overlap(this.player.breadGroup, this.enemyGroup, this.bread_Enemy_Collision, null, this);
+
+		this.physics.add.collider(this.player, this.mapgen.treeBaseLayer);
+		this.physics.add.collider(this.player, this.mapgen.collideLayer);
 	}
 	createUpgrades()
 	{
