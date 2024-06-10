@@ -3,6 +3,9 @@ class MapGen
     mapWidth = 120;
     mapHeight = 68; // In tiles
 
+    treeBaseLayer;
+    collideLayer;
+
     TILES = 
     {
         FLOOR: [
@@ -44,6 +47,11 @@ class MapGen
             this.map.destroy();
         }
 
+        if (this.mapTree != undefined)
+        {
+            this.mapTree.destroy();
+        }
+
         // Create a blank tilemap
         this.map = this.scene.make.tilemap({tileWidth: 16, tileHeight: 16, width: this.mapWidth, height: this.mapHeight});
 
@@ -67,6 +75,7 @@ class MapGen
         // Fill the floor with mostly clean tiles, but occasionally place a dirty tile
         // See "Weighted Randomize" example for more information on how to use weightedRandomize.
         this.map.weightedRandomize(this.TILES.FLOOR, 0, 0, this.mapWidth, this.mapHeight, 'Floor');
+        this.floorLayer.depth = 1;
     }
 
     generateDecor() 
@@ -76,6 +85,7 @@ class MapGen
         // this.decorLayer = this.map.createLayer('Decor', this.tilesetList);
         this.decorLayer.setScale(SCALE);
         this.map.weightedRandomize(this.TILES.DECOR, 0, 0, this.mapWidth, this.mapHeight, 'Decor');
+        this.decorLayer.depth = 2;
     }
 
     generateCollidables() 
@@ -86,30 +96,12 @@ class MapGen
         this.collideLayer.setScale(SCALE * 1.5);
         this.map.weightedRandomize(this.TILES.COLLIDES, 0, 0, this.mapWidth, this.mapHeight, 'Collide');
         this.collideLayer.setCollisionByExclusion([-1], true);
-
-        /*
-        let tileArray = this.layersToGrid();
-
-        for (let row of tileArray) {
-            for (let til of row) {
-                if (til != null && til != undefined)
-                {
-                    if (tileset.getTileProperties(til) != null && tileset.getTileProperties(til) != undefined) {
-                        let tileCost = tileset.getTileProperties(til).cost;
-                        this.finder.setTileCost(til, tileCost);
-                    }
-
-
-                }
-            }
-        } 
-        */
+        this.collideLayer.depth = 7;
     }
 
     generateTreeBorder() 
     {
         let val = Phaser.Math.Between(1, 3);
-        console.log(val);
         let mapType = "";
 
         if (val == 1)
@@ -135,14 +127,14 @@ class MapGen
         // Make layers
         this.treeBaseLayer = this.mapTree.createLayer("Tree-base", this.treeTileset);
         this.treeBaseLayer.setScale(SCALE);
-        // this.treeBaseLayer.depth = 2; // depth = rendering order
+        this.treeBaseLayer.depth = 10; // depth = rendering order
         this.treeDecorLayer = this.mapTree.createLayer("Tree-decor", this.treeTileset);
         this.treeDecorLayer.setScale(SCALE);
-        // this.treeDecorLayer.depth = 3;
+        this.treeDecorLayer.depth = 11;
         this.treeEdgeLayer = this.mapTree.createLayer("Tree-edge", this.treeTileset);
         this.treeEdgeLayer.setScale(SCALE);
         this.treeEdgeLayer.setAlpha(0.75);
-        // this.treeEdgeLayer.depth = 4;
+        this.treeEdgeLayer.depth = 12;
 
         if (val == 1)
         {
@@ -164,19 +156,5 @@ class MapGen
         }
 
         this.treeBaseLayer.setCollisionByExclusion([-1], true);
-
-    }
-
-    mergeMaps()
-    {
-        console.log(this.map.layers);
-        console.log(this.mapTree.layers);
-
-        for (let layer of this.mapTree.layers)
-        {
-            this.map.layers.push(layer);
-        }
-
-        this.mapTree.destroy();
     }
 }

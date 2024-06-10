@@ -47,6 +47,7 @@ class Enemy1 extends Enemy
 		this.attackSwipe = scene.physics.add.sprite(-100, -100, "Net Swipe", 0);
 		this.attackSwipe.setVisible(false);
 		this.attackSwipe.setScale(1.5);
+		this.attackSwipe.depth = 6;
 		this.attackSwipe.owner = this;
 		this.attackSwipe.DAMAGE = this.DAMAGE;
 		this.attackSwipe.KNOCKBACK_VELOCITY = this.ATTACK_KNOCKBACK_VELOCITY;
